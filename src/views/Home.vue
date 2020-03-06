@@ -1,18 +1,14 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <span class="icon-add"></span>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Epub from 'epubjs'
+global.epub = Epub
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
 }
 </script>

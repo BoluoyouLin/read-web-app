@@ -24,15 +24,22 @@
                 }
             },
             toggleTitleAndMenu () {
+                if (this.menuVisible) {
+                    this.setSettingVisible(-1)
+                    this.setFontFamilyVisible(false)
+                }
                 this.setMenuVisible(!this.menuVisible)
             },
             hideTitleAndMenu () {
+                this.setSettingVisible(-1)
                 this.setMenuVisible(false)
+                this.setFontFamilyVisible(false)
             },
             initEpub () {
                 const url = 'http://192.168.0.101:8081/epub/' +
                 this.fileName + '.epub'
                 this.book = new Epub(url)
+                this.setCurrentBook(this.book)
                 this.bookRender = this.book.renderTo('book', {
                     width: innerWidth,
                     height: innerHeight,
@@ -55,6 +62,16 @@
                     }
                     event.preventDefault()
                     event.stopPropagation()
+                })
+                this.bookRender.hooks.content.register(contents => {
+                    Promise.all([
+                        contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/cabin.css`),
+                        contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/daysOne.css`),
+                        contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/montserrat.css`),
+                        contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/tangerine.css`)
+                    ]).then(() => {
+                        console.log(('字体加载完成'))
+                    })
                 })
             }
         },

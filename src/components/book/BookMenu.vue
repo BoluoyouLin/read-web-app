@@ -1,28 +1,41 @@
 <template>
-    <transition name="slide-up">
-        <div class="menu-wrapper" :class="{'hide-box-shadow': !menuVisible}" v-show="menuVisible">
-            <div class="icon-wrapper">
-                <span class="icon-menu" @click="showSetting(3)"></span>
+    <div>
+        <transition name="slide-up">
+            <div class="menu-wrapper" :class="{'hide-box-shadow': !menuVisible || settingVisible >= 0}"
+                 v-show="menuVisible">
+                <div class="icon-wrapper">
+                    <span class="icon-menu" @click="showSetting(3)"></span>
+                </div>
+                <div class="icon-wrapper">
+                    <span class="icon-progress" @click="showSetting(2)"></span>
+                </div>
+                <div class="icon-wrapper">
+                    <span class="icon-bright" @click="showSetting(1)"></span>
+                </div>
+                <div class="icon-wrapper">
+                    <span class="icon-A" @click="showSetting(0)"></span>
+                </div>
             </div>
-            <div class="icon-wrapper">
-                <span class="icon-progress" @click="showSetting(2)"></span>
-            </div>
-            <div class="icon-wrapper">
-                <span class="icon-bright" @click="showSetting(1)"></span>
-            </div>
-            <div class="icon-wrapper">
-                <span class="icon-A" @click="showSetting(0)"></span>
-            </div>
-        </div>
-    </transition>
+        </transition>
+        <book-set-font></book-set-font>
+        <book-set-font-family></book-set-font-family>
+    </div>
 </template>
 <script>
     import { bookMixin } from '../../utils/mixin'
+    import BookSetFont from './BookSetFont'
+    import BookSetFontFamily from './BookSetFontFamily'
 
     export default {
         mixins: [bookMixin],
+        components: {
+            BookSetFont,
+            BookSetFontFamily
+        },
         methods: {
-            showSetting (key) {}
+            showSetting (key) {
+                this.setSettingVisible(key)
+            }
         }
     }
 </script>

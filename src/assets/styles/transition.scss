@@ -4,11 +4,14 @@
 .slide-down-enter-to, .slide-down-leave, .slide-up-enter-to, .slide-up-leave {
   transform: translate3d(0, 0, 0)
 }
-.slide-down-enter-active, .slide-down-leave-active, .slide-up-enter-active, .slide-up-leave-active, .fade-enter-active, .fade-leave-active, .slide-right-enter-active, .slide-right-leave-active {
+.slide-down-enter-active, .slide-down-leave-active, .slide-up-enter-active, .slide-up-leave-active,
+.fade-enter-active, .fade-leave-active, .slide-right-enter-active, .slide-right-leave-active,
+.wrapper-slide-up-enter-active, .wrapper-slide-up-leave-active
+{
   transition: all .3s linear;
 }
 .slide-up-enter, .slide-up-leave-to {
-  transform: translate3d(0, px2rem(108), 0)
+  transform: translate3d(0, px2rem(138), 0)
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
@@ -18,4 +21,12 @@
 }
 .slide-right-enter, .slide-right-leave-to {
   transform: translate3d(-100%, 0, 0);
+}
+.wrapper-slide-up-enter, .wrapper-slide-up-leave-to {
+  transform: translate3d(0, 100%, 0);
+  opacity: 0;
+}
+.wrapper-slide-up-enter-to, .wrapper-slide-up-leave {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
 }

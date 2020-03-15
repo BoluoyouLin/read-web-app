@@ -1,4 +1,5 @@
 import { mapGetters, mapActions } from 'vuex'
+import { addCSS, removeAllCSS, themeList } from './book'
 
 export const bookMixin = {
     computed: {
@@ -22,7 +23,10 @@ export const bookMixin = {
             'pageList',
             'offsetY',
             'isBookmark'
-        ])
+        ]),
+        themeList () {
+            return themeList(this)
+        }
     },
     methods: {
         ...mapActions([
@@ -45,6 +49,10 @@ export const bookMixin = {
             'setPageList',
             'setOffsetY',
             'setIsBookmark'
-        ])
+        ]),
+        changeTheme (theme) {
+            removeAllCSS()
+            addCSS(`${process.env.VUE_APP_RESOURCE_URL}/theme/${theme}.css`)
+        }
     }
 }

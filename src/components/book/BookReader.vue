@@ -7,6 +7,14 @@
 <script>
     import { bookMixin } from '../../utils/mixin'
     import Epub from 'epubjs'
+    import {
+        getTheme,
+        getFontFamily,
+        getFontSize,
+        setTheme,
+        setFontFamily,
+        setFontSize
+    } from '../../utils/localStorage'
     global.ePub = Epub
     export default {
         mixins: [bookMixin],
@@ -35,8 +43,39 @@
                 this.setMenuVisible(false)
                 this.setFontFamilyVisible(false)
             },
+            initFontSize () {
+                const fontSize = getFontSize(this.fileName)
+                if (fontSize) {
+                    this.setDefaultFontSize(fontSize)
+                    this.currentBook.rendition.themes.fontSize(fontSize + 'px')
+                } else {
+                    setFontSize(this.fileName, this.defaultFontSize)
+                }
+            },
+            initTheme () {
+                let theme = getTheme()
+                if (!theme) {
+                    theme = this.themeList[0].name
+                    setTheme(theme)
+                }
+                this.themeList.forEach(item => {
+                    this.currentBook.rendition.themes.register(item.name, item.style)
+                })
+                this.setDefaultTheme(theme)
+                this.changeTheme(theme)
+                this.currentBook.rendition.themes.select(theme)
+            },
+            initFontFamily () {
+                const fontFamily = getFontFamily(this.fileName)
+                if (fontFamily) {
+                    this.setDefaultFontFamily(fontFamily)
+                    this.currentBook.rendition.themes.font(fontFamily)
+                } else {
+                    setFontFamily(this.fileName, this.defaultFontFamily)
+                }
+            },
             initEpub () {
-                const url = 'http://192.168.0.101:8081/epub/' +
+                const url = `${process.env.VUE_APP_RESOURCE_URL}/epub/` +
                 this.fileName + '.epub'
                 this.book = new Epub(url)
                 this.setCurrentBook(this.book)
@@ -45,7 +84,11 @@
                     height: innerHeight,
                     methods: 'default'
                 })
-                this.bookRender.display()
+                this.bookRender.display().then(() => {
+                    this.initTheme()
+                    this.initFontSize()
+                    this.initFontFamily()
+                })
                 this.bookRender.on('touchstart', event => {
                     this.startX = event.changedTouches[0].clientX
                     this.startTime = event.timeStamp

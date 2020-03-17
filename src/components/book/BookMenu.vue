@@ -19,21 +19,24 @@
         </transition>
         <book-set-font></book-set-font>
         <book-set-font-family></book-set-font-family>
-        <boo-k-set-theme></boo-k-set-theme>
+        <book-set-theme></book-set-theme>
+        <book-set-progress></book-set-progress>
     </div>
 </template>
 <script>
     import { bookMixin } from '../../utils/mixin'
     import BookSetFont from './BookSetFont'
     import BookSetFontFamily from './BookSetFontFamily'
-    import BooKSetTheme from './BookSetTheme'
+    import BookSetTheme from './BookSetTheme'
+    import BookSetProgress from './BookSetProgress'
 
     export default {
         mixins: [bookMixin],
         components: {
             BookSetFont,
             BookSetFontFamily,
-            BooKSetTheme
+            BookSetTheme,
+            BookSetProgress
         },
         methods: {
             showSetting (key) {

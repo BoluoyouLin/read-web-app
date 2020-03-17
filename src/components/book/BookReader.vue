@@ -116,6 +116,12 @@
                         console.log(('字体加载完成'))
                     })
                 })
+                this.book.ready.then(() => {
+                    return this.book.locations.generate(750 * (window.innerWidth / 375) *
+                        (getFontSize() / 16)).then(() => {
+                           this.setBookAvailable(true)
+                    })
+                })
             }
         },
         mounted () {

@@ -1,7 +1,7 @@
 <template>
     <transition name="slide-up">
-        <div class="set-wrapper" v-show="menuVisible && settingVisible === 0">
-            <div class="set-font-size">
+        <div class="setting-wrapper" v-show="menuVisible && settingVisible === 0">
+            <div class="setting-font-size">
                 <div class="preview" :style="{fontSize: fontSizeList[0].fontSize + 'px'}">A</div>
                 <div class="select">
                     <div class="select-wrapper" v-for="(item, index) in fontSizeList" :key="index"
@@ -56,7 +56,7 @@
 
 <style lang="scss" scoped>
     @import './src/assets/styles/global.scss';
-    .set-wrapper {
+    .setting-wrapper {
         display: flex;
         flex-direction: column;
         position: absolute;
@@ -67,7 +67,7 @@
         height: px2rem(90);
         background: white;
         box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, .15);
-        .set-font-size {
+        .setting-font-size {
             display: flex;
             flex: 2;
             height: 100%;

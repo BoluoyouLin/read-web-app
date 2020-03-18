@@ -10,6 +10,7 @@
                            max="100"
                            min="0"
                            step="1"
+                           @change="onProgressChange($event.target.value)"
                            @input="onProgressInput($event.target.value)"
                            :value="progress"
                            :disabled="!bookAvailable"
@@ -19,7 +20,8 @@
                     </div>
                 </div>
                 <div class="text-wrapper">
-                    <span>{{bookAvailable ? progress + '%' : '加载中...'}}</span>
+                    <span class="section-name">{{getSectionName}}</span>
+                    <span>({{bookAvailable ? progress + '%' : '加载中...'}})</span>
                 </div>
             </div>
         </div>
@@ -31,22 +33,60 @@
 
     export default {
         mixins: [bookMixin],
+        computed: {
+            getSectionName () {
+                let sectionName = ''
+                if (this.section) {
+                    const sectionObj = this.currentBook.section(this.section)
+                    if (sectionObj && sectionObj.href) {
+                        sectionName = this.currentBook.navigation.get(sectionObj.href).label
+                    }
+                }
+                return sectionName
+            }
+        },
         methods: {
-            onProgressInput (value) {
+            onProgressChange (value) {
                 this.setProgress(value).then(() => {
                     this.changePage()
+                })
+            },
+            onProgressInput (value) {
+                this.setProgress(value).then(() => {
                     this.changeProgressColor()
                 })
             },
             changePage () {
                 const epubCFI = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
-                this.currentBook.rendition.display(epubCFI)
+                this.display(epubCFI).then(() => {
+                    this.updateProgress()
+                })
             },
             changeProgressColor () {
                 this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
             },
-            lastSection () {},
-            nextSection () {}
+            lastSection () {
+                if (this.section > 0 && this.bookAvailable) {
+                    this.setSection(this.section - 1).then(() => {
+                        this.updatePage()
+                    })
+                }
+            },
+            nextSection () {
+                if (this.section < this.currentBook.spine.length - 1 && this.bookAvailable) {
+                    this.setSection(this.section + 1).then(() => {
+                        this.updatePage()
+                    })
+                }
+            },
+            updatePage () {
+                const sectionObj = this.currentBook.section(this.section)
+                if (sectionObj && sectionObj.href) {
+                    this.display(sectionObj.href).then(() => {
+                        this.updateProgress()
+                    })
+                }
+            }
         },
         updated () {
             this.changeProgressColor()
@@ -103,8 +143,13 @@
                 width: 100%;
                 color: #333;
                 font-size: px2rem(12);
-                text-align: center;
                 bottom: px2rem(10);
+                padding: 0 px2rem(20);
+                box-sizing: border-box;
+                @include center
+                .section-name {
+                    @include ellipsis
+                }
             }
         }
     }

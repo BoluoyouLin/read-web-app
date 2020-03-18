@@ -13,7 +13,7 @@
         getFontSize,
         setTheme,
         setFontFamily,
-        setFontSize
+        setFontSize, getBookLocation
     } from '../../utils/localStorage'
     global.ePub = Epub
     export default {
@@ -21,13 +21,17 @@
         methods: {
             nextPage () {
                 if (this.bookRender) {
-                    this.bookRender.next()
+                    this.bookRender.next().then(() => {
+                        this.updateProgress()
+                    })
                     this.hideTitleAndMenu()
                 }
             },
             lastPage () {
                 if (this.bookRender) {
-                    this.bookRender.prev()
+                    this.bookRender.prev().then(() => {
+                        this.updateProgress()
+                    })
                     this.hideTitleAndMenu()
                 }
             },
@@ -84,10 +88,12 @@
                     height: innerHeight,
                     methods: 'default'
                 })
-                this.bookRender.display().then(() => {
+                const locationCFI = getBookLocation(this.fileName)
+                this.display(locationCFI).then(() => {
                     this.initTheme()
                     this.initFontSize()
                     this.initFontFamily()
+                    this.updateProgress()
                 })
                 this.bookRender.on('touchstart', event => {
                     this.startX = event.changedTouches[0].clientX
@@ -119,7 +125,8 @@
                 this.book.ready.then(() => {
                     return this.book.locations.generate(750 * (window.innerWidth / 375) *
                         (getFontSize() / 16)).then(() => {
-                           this.setBookAvailable(true)
+                            this.setBookAvailable(true)
+                            this.updateProgress()
                     })
                 })
             }

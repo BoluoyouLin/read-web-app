@@ -64,3 +64,11 @@ export function setTheme (theme) {
 export function getTheme () {
    return getLocalStorage('theme')
 }
+
+export function getBookLocation (fileName) {
+    return getBookInfo(fileName, 'location')
+}
+
+export function setBookLocation (fileName, location) {
+    return setBookInfo(fileName, 'location', location)
+}

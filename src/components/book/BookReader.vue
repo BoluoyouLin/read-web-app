@@ -15,6 +15,7 @@
         setFontFamily,
         setFontSize, getBookLocation
     } from '../../utils/localStorage'
+    import { flatten } from '../../utils/book'
     global.ePub = Epub
     export default {
         mixins: [bookMixin],
@@ -56,6 +57,7 @@
                     setFontSize(this.fileName, this.defaultFontSize)
                 }
             },
+            // 初始化主题
             initTheme () {
                 let theme = getTheme()
                 if (!theme) {
@@ -69,6 +71,7 @@
                 this.changeTheme(theme)
                 this.currentBook.rendition.themes.select(theme)
             },
+            // 初始化字体类型
             initFontFamily () {
                 const fontFamily = getFontFamily(this.fileName)
                 if (fontFamily) {
@@ -77,6 +80,30 @@
                 } else {
                     setFontFamily(this.fileName, this.defaultFontFamily)
                 }
+            },
+            // 获取图书信息（封面、书名、作者、目录）
+            getInfo () {
+                this.book.loaded.cover.then(cover => {
+                    this.book.archive.createUrl(cover).then(coverUrl => {
+                        this.setCover(coverUrl)
+                    })
+                })
+                this.book.loaded.metadata.then(metadata => {
+                    this.setMetadata(metadata)
+                })
+                this.book.loaded.navigation.then(nav => {
+                    const navList = flatten(nav.toc)
+                    function setLevel (item, level = 0) {
+                        if (item.parent) {
+                            return setLevel(navList.filter(i => i.id === item.parent), ++level)
+                        }
+                        return level
+                    }
+                    navList.forEach(item => {
+                        item.level = setLevel(item)
+                    })
+                    this.setNavigation(navList)
+                })
             },
             initEpub () {
                 const url = `${process.env.VUE_APP_RESOURCE_URL}/epub/` +
@@ -94,6 +121,7 @@
                     this.initFontSize()
                     this.initFontFamily()
                     this.updateProgress()
+                    this.getInfo()
                 })
                 this.bookRender.on('touchstart', event => {
                     this.startX = event.changedTouches[0].clientX

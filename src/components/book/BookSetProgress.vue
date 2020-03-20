@@ -38,7 +38,7 @@
                 let sectionName = ''
                 if (this.section) {
                     const sectionObj = this.currentBook.section(this.section)
-                    if (sectionObj && sectionObj.href) {
+                    if (sectionObj && sectionObj && this.currentBook && this.currentBook.navigation) {
                         sectionName = this.currentBook.navigation.get(sectionObj.href).label
                     }
                 }

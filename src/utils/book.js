@@ -85,3 +85,7 @@ export function removeAllCSS () {
     removeCSS(`${process.env.VUE_APP_RESOURCE_URL}/theme/gold.css`)
     removeCSS(`${process.env.VUE_APP_RESOURCE_URL}/theme/night.css`)
 }
+
+export function flatten (array) {
+    return [].concat(array, ...array.subitems ? flatten(array.subitems) : [])
+}

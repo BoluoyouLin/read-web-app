@@ -21,6 +21,7 @@
         <book-set-font-family></book-set-font-family>
         <book-set-theme></book-set-theme>
         <book-set-progress></book-set-progress>
+        <book-slide></book-slide>
     </div>
 </template>
 <script>
@@ -29,6 +30,7 @@
     import BookSetFontFamily from './BookSetFontFamily'
     import BookSetTheme from './BookSetTheme'
     import BookSetProgress from './BookSetProgress'
+    import BookSlide from './BookSlide'
 
     export default {
         mixins: [bookMixin],
@@ -36,7 +38,8 @@
             BookSetFont,
             BookSetFontFamily,
             BookSetTheme,
-            BookSetProgress
+            BookSetProgress,
+            BookSlide
         },
         methods: {
             showSetting (key) {

@@ -95,7 +95,7 @@
                     const navList = flatten(nav.toc)
                     function setLevel (item, level = 0) {
                         if (item.parent) {
-                            return setLevel(navList.filter(i => i.id === item.parent), ++level)
+                            return setLevel(navList.filter(i => i.id === item.parent)[0], ++level)
                         }
                         return level
                     }
@@ -105,6 +105,7 @@
                     this.setNavigation(navList)
                 })
             },
+            // 根据url获取并解析epub电子书
             initEpub () {
                 const url = `${process.env.VUE_APP_RESOURCE_URL}/epub/` +
                 this.fileName + '.epub'
@@ -139,7 +140,7 @@
                     }
                     event.preventDefault()
                     event.stopPropagation()
-                })
+                }, { passive: true })
                 this.bookRender.hooks.content.register(contents => {
                     Promise.all([
                         contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/cabin.css`),

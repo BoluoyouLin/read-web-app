@@ -51,17 +51,26 @@ export const bookMixin = {
             'setOffsetY',
             'setIsBookmark'
         ]),
+        // 更换主题
         changeTheme (theme) {
             removeAllCSS()
             addCSS(`${process.env.VUE_APP_RESOURCE_URL}/theme/${theme}.css`)
         },
+        // 更新进度条
         updateProgress () {
             const currentLocation = this.currentBook.rendition.currentLocation()
-            const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
-            setBookLocation(this.fileName, currentLocation.start.cfi)
-            this.setProgress(Math.floor(progress * 100))
-            this.setSection(currentLocation.start.index)
+            if (currentLocation && currentLocation.start) {
+                const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
+                setBookLocation(this.fileName, currentLocation.start.cfi)
+                this.setProgress(Math.floor(progress * 100))
+                this.setSection(currentLocation.start.index)
+            }
         },
+        // 隐藏目录
+        hideNavigation () {
+            this.setSettingVisible(-1)
+        },
+        // 根据cfi渲染电子书
         display (cfi) {
             if (cfi) {
                 return this.currentBook.rendition.display(cfi)

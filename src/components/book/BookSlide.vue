@@ -1,7 +1,7 @@
 <template>
     <transition name="fade-slide-right">
         <div class="slide-content-wrapper" v-show="menuVisible && settingVisible === 3">
-            <div class="content">
+            <div class="content" v-if="bookAvailable">
                 <div class="content-body">
                     <component :is="currentTable === 1 ? content : bookmark"></component>
                 </div>
@@ -16,7 +16,10 @@
                     >{{$t('book.bookmark')}}</div>
                 </div>
             </div>
-            <div class="content-background" @click="hide()"></div>
+            <div class="slide-loading-wrapper" v-else>
+                <book-loading></book-loading>
+            </div>
+            <div class="content-background" @click="hideNavigation()"></div>
         </div>
     </transition>
 </template>
@@ -24,9 +27,13 @@
 <script>
     import { bookMixin } from '../../utils/mixin'
     import BookSlideContent from './BookSlideContent'
+    import BookLoading from './BookLoading'
 
     export default {
         mixins: [bookMixin],
+        components: {
+            BookLoading
+        },
         data () {
             return {
                 currentTable: 1,
@@ -35,10 +42,6 @@
             }
         },
         methods: {
-            // 隐藏目录
-            hide () {
-                this.setSettingVisible(-1)
-            },
             // 改变当前table值
             changeTable (value) {
                 this.currentTable = value
@@ -77,9 +80,6 @@
                     flex: 1;
                     font-size: px2rem(14);
                     @include center;
-                    &.selected {
-                        font-weight: bold;
-                    }
                 }
             }
         }
@@ -87,6 +87,12 @@
             flex: 0 0 15%;
             height: 100%;
             width: 15%;
+        }
+        .slide-loading-wrapper {
+            flex: 0 0 85%;
+            height: 100%;
+            width: 85%;
+            @include center;
         }
     }
 </style>

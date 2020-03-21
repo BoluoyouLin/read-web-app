@@ -8,7 +8,9 @@
                 <input class="content-search-input"
                        type="text"
                        @click="showCancel"
+                       @keyup.enter.exact="search"
                        :placeholder="$t('book.searchHint')"
+                       v-model="searchText"
                 />
             </div>
             <div class="book-slide-content-header-cancel"
@@ -16,10 +18,11 @@
                  @click="hideCancel"
             >{{$t('book.cancel')}}</div>
         </div>
-        <div class="book-info">
+        <div class="book-info" v-show="!cancelVisible">
             <div class="book-info-left">
-                <img :src="this.cover"
+                <img :src="cover"
                      class="book-info-image"
+                     alt="书籍封面"
                 />
             </div>
             <div class="book-info-center">
@@ -31,13 +34,39 @@
                 {{this.progress}}%
             </div>
         </div>
-        <Scroll class="navigation"></Scroll>
+        <Scroll class="navigation"
+                :top="140"
+                :bottom="45"
+                ref="scroll"
+                v-show="!cancelVisible"
+        >
+            <div class="navigation-item" v-for="(item, index) in navigation" :key="index">
+                <div class="navigation-item-label"
+                     :style="textIndent(item)"
+                     :class="{'selected' : index === section}"
+                     @click="displayBook(item.href)"
+                >{{item.label}}</div>
+                <div class="navigation-item-page"></div>
+            </div>
+        </Scroll>
+        <Scroll class="search-list-wrapper"
+                :top="50"
+                :bottom="45"
+                v-show="cancelVisible"
+        >
+            <div class="search-list-item" v-for="(item , index) in searchList"
+                 :key="index"
+                 v-html="item.excerpt"
+                 @click="displayBook(item.cfi,true)"
+            ></div>
+        </Scroll>
     </div>
 </template>
 
 <script>
     import { bookMixin } from '../../utils/mixin'
     import Scroll from '../common/Scroll'
+    import { px2rem } from '../../utils/utils'
     export default {
         components: { Scroll },
         mixins: [bookMixin],
@@ -46,10 +75,22 @@
         },
         data () {
             return {
-                cancelVisible: false
+                cancelVisible: false,
+                searchList: null,
+                searchText: ''
             }
         },
         methods: {
+            // 点击目录后渲染对应章节
+            displayBook (href, highlight = false) {
+                this.display(href).then(() => {
+                    this.hideNavigation()
+                    this.updateProgress()
+                    if (highlight) {
+                        this.currentBook.rendition.annotations.highlight(href)
+                    }
+                })
+            },
             // 展示搜索界面
             showCancel () {
                 this.cancelVisible = true
@@ -57,6 +98,34 @@
             // 隐藏搜索界面
             hideCancel () {
                 this.cancelVisible = false
+                this.searchText = ''
+                this.searchList = null
+            },
+            // 计算目录缩进
+            textIndent (item) {
+                return {
+                    marginLeft: `${px2rem(item.level * 10)}rem`
+                }
+            },
+            // 搜索
+            search () {
+                if (this.searchText && this.searchText.length > 0) {
+                    this.doSearch(this.searchText).then(list => {
+                        this.searchList = list.map(item => {
+                            item.excerpt = item.excerpt.replace(this.searchText,
+                                `<span class="content-search-text">${this.searchText}</span>`)
+                            return item
+                        })
+                    })
+                }
+            },
+            // 官方给出的搜索算法
+            doSearch (q) {
+                return Promise.all(
+                    this.currentBook.spine.spineItems
+                        .map(item => item.load(this.currentBook.load.bind(this.currentBook))
+                            .then(item.find.bind(item, q)).finally(item.unload.bind(item)))
+                ).then(results => Promise.resolve([].concat.apply([], results)))
             }
         }
     }
@@ -98,6 +167,7 @@
                 flex: 0 0 px2rem(40);
                 font-size: px2rem(12);
                 @include center;
+                font-weight: bold;
             }
         }
         .book-info {
@@ -121,18 +191,44 @@
                     @include ellipsis2(3);
                     width: px2rem(180.75);
                     font-size: px2rem(14);
+                    line-height: px2rem(16);
                 }
                 .book-info-author {
                     margin-top: px2rem(5);
                     @include ellipsis2(2);
                     width: px2rem(180.75);
                     font-size: px2rem(12);
+                    line-height: px2rem(14);
                 }
             }
             .book-info-right {
                 flex: 0 0 px2rem(60);
-                font-size: px2rem(14);
+                font-size: px2rem(12);
                 @include center;
+            }
+        }
+        .navigation {
+            .navigation-item {
+                padding: px2rem(20) px2rem(10);
+                font-size: px2rem(14);
+                line-height: px2rem(16);
+                display: flex;
+                box-sizing: border-box;
+                border-bottom: px2rem(1) solid #bbbbbb;
+                .navigation-item-label {
+                    flex: 1;
+                    @include ellipsis;
+                }
+                .navigation-item-page {}
+            }
+        }
+        .search-list-wrapper {
+            .search-list-item {
+                font-size: px2rem(14);
+                line-height: px2rem(16);
+                padding: px2rem(20) px2rem(10);
+                box-sizing: border-box;
+                border-bottom: px2rem(1) solid #bbbbbb;
             }
         }
     }

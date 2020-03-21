@@ -35,14 +35,14 @@
         mixins: [bookMixin],
         computed: {
             getSectionName () {
-                let sectionName = ''
-                if (this.section) {
-                    const sectionObj = this.currentBook.section(this.section)
-                    if (sectionObj && sectionObj && this.currentBook && this.currentBook.navigation) {
-                        sectionName = this.currentBook.navigation.get(sectionObj.href).label
-                    }
-                }
-                return sectionName
+                // let sectionName = ''
+                // if (this.section) {
+                //     const sectionObj = this.currentBook.section(this.section)
+                //     if (sectionObj && sectionObj && this.currentBook && this.currentBook.navigation) {
+                //         sectionName = this.currentBook.navigation.get(sectionObj.href).label
+                //     }
+                // }
+                return this.section && this.navigation ? this.navigation[this.section].label : ''
             }
         },
         methods: {
@@ -146,7 +146,7 @@
                 bottom: px2rem(10);
                 padding: 0 px2rem(20);
                 box-sizing: border-box;
-                @include center
+                @include center;
                 .section-name {
                     @include ellipsis
                 }

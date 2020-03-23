@@ -1,6 +1,11 @@
 <template>
     <div class="book-reader">
         <div id="book"></div>
+        <div class="book-mask"
+             @click="maskClick"
+             @touchmove="maskMove"
+             @touchend="maskMoveEnd"
+        ></div>
     </div>
 </template>
 
@@ -20,6 +25,34 @@
     export default {
         mixins: [bookMixin],
         methods: {
+            maskClick (e) {
+                const offsetX = e.offsetX
+                const width = window.innerWidth
+                if (offsetX < width * 0.3) {
+                    this.lastPage()
+                } else if (offsetX > width * 0.7) {
+                    this.nextPage()
+                } else {
+                    this.toggleTitleAndMenu()
+                }
+                e.preventDefault()
+                e.stopPropagation()
+            },
+            maskMove (e) {
+                let offsetY = 0
+                if (this.firstOffsetY) {
+                    offsetY = e.changedTouches[0].clientY - this.firstOffsetY
+                    this.setOffsetY(offsetY)
+                } else {
+                    this.firstOffsetY = e.changedTouches[0].clientY
+                }
+                e.preventDefault()
+                e.stopPropagation()
+            },
+            maskMoveEnd (e) {
+                this.setOffsetY(0)
+                this.firstOffsetY = null
+            },
             nextPage () {
                 if (this.bookRender) {
                     this.bookRender.next().then(() => {
@@ -124,23 +157,23 @@
                     this.updateProgress()
                     this.getInfo()
                 })
-                this.bookRender.on('touchstart', event => {
-                    this.startX = event.changedTouches[0].clientX
-                    this.startTime = event.timeStamp
-                })
-                this.bookRender.on('touchend', event => {
-                    const offsetX = event.changedTouches[0].clientX - this.startX
-                    const offsetTime = event.timeStamp - this.startTime
-                    if (offsetTime < 500 && offsetX > 40) {
-                        this.lastPage()
-                    } else if (offsetTime < 500 && offsetX < -40) {
-                        this.nextPage()
-                    } else {
-                        this.toggleTitleAndMenu()
-                    }
-                    event.preventDefault()
-                    event.stopPropagation()
-                }, { passive: true })
+                // this.bookRender.on('touchstart', event => {
+                //     this.startX = event.changedTouches[0].clientX
+                //     this.startTime = event.timeStamp
+                // })
+                // this.bookRender.on('touchend', event => {
+                //     const offsetX = event.changedTouches[0].clientX - this.startX
+                //     const offsetTime = event.timeStamp - this.startTime
+                //     if (offsetTime < 500 && offsetX > 40) {
+                //         this.lastPage()
+                //     } else if (offsetTime < 500 && offsetX < -40) {
+                //         this.nextPage()
+                //     } else {
+                //         this.toggleTitleAndMenu()
+                //     }
+                //     event.preventDefault()
+                //     event.stopPropagation()
+                // }, { passive: true })
                 this.bookRender.hooks.content.register(contents => {
                     Promise.all([
                         contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/cabin.css`),
@@ -169,6 +202,14 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+    @import "../../assets/styles/global";
+    .book-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 120;
+    }
 </style>

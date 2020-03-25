@@ -1,6 +1,6 @@
 import { mapGetters, mapActions } from 'vuex'
 import { addCSS, removeAllCSS, themeList } from './book'
-import { setBookLocation } from './localStorage'
+import { getBookmark, setBookLocation } from './localStorage'
 
 export const bookMixin = {
     computed: {
@@ -64,6 +64,16 @@ export const bookMixin = {
                 setBookLocation(this.fileName, currentLocation.start.cfi)
                 this.setProgress(Math.floor(progress * 100))
                 this.setSection(currentLocation.start.index)
+                const bookmark = getBookmark(this.fileName)
+                if (bookmark) {
+                    if (bookmark.some(item => item.cfi === currentLocation.start.cfi)) {
+                        this.setIsBookmark(true)
+                    } else {
+                        this.setIsBookmark(false)
+                    }
+                } else {
+                    this.setIsBookmark(false)
+                }
             }
         },
         // 隐藏目录
@@ -77,6 +87,12 @@ export const bookMixin = {
             } else {
                 return this.currentBook.rendition.display()
             }
+        },
+        // 隐藏标题栏和菜单栏
+        hideTitleAndMenu () {
+            this.setSettingVisible(-1)
+            this.setMenuVisible(false)
+            this.setFontFamilyVisible(false)
         }
     }
 }

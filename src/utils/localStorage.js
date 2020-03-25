@@ -72,3 +72,11 @@ export function getBookLocation (fileName) {
 export function setBookLocation (fileName, location) {
     return setBookInfo(fileName, 'location', location)
 }
+
+export function getBookmark (fileName) {
+    return getBookInfo(fileName, 'bookmark')
+}
+
+export function setBookmark (fileName, bookmark) {
+    return setBookInfo(fileName, 'bookmark', bookmark)
+}

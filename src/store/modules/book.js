@@ -18,7 +18,7 @@ const book = {
         paginate: '',
         pageList: null,
         offsetY: 0,
-        isBookmark: null
+        isBookmark: null // 当前页是否为书签页
       },
       mutations: {
         SET_FILE_NAME: (state, newFileName) => {

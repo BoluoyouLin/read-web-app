@@ -3,6 +3,7 @@
         <book-reader></book-reader>
         <book-title></book-title>
         <book-menu></book-menu>
+        <bookmark></bookmark>
     </div>
 </template>
 
@@ -10,6 +11,7 @@
     import BookReader from '../../components/book/BookReader'
     import BookTitle from '../../components/book/BookTitle'
     import BookMenu from '../../components/book/BookMenu'
+    import Bookmark from '../../components/book/BookBookmark'
     import { bookMixin } from '../../utils/mixin'
 
     export default {
@@ -17,14 +19,17 @@
         components: {
             BookReader,
             BookTitle,
-            BookMenu
+            BookMenu,
+            Bookmark
         },
         watch: {
             offsetY (value) {
-                if (value > 0) {
-                    this.bookMove(value)
-                } else if (value === 0) {
-                    this.reduction()
+                if (this.bookAvailable && !this.menuVisible) {
+                    if (value > 0) {
+                        this.bookMove(value)
+                    } else if (value === 0) {
+                        this.reduction()
+                    }
                 }
             }
         },

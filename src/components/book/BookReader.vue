@@ -36,7 +36,6 @@
                     this.toggleTitleAndMenu()
                 }
                 e.preventDefault()
-                e.stopPropagation()
             },
             maskMove (e) {
                 let offsetY = 0
@@ -75,11 +74,6 @@
                     this.setFontFamilyVisible(false)
                 }
                 this.setMenuVisible(!this.menuVisible)
-            },
-            hideTitleAndMenu () {
-                this.setSettingVisible(-1)
-                this.setMenuVisible(false)
-                this.setFontFamilyVisible(false)
             },
             initFontSize () {
                 const fontSize = getFontSize(this.fileName)

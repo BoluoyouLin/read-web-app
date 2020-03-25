@@ -103,7 +103,7 @@
         position: absolute;
         bottom: px2rem(48);
         left: 0;
-        z-index: 101;
+        z-index: 160;
         width: 100%;
         .setting-progress {
             position: relative;

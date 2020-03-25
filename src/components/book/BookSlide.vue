@@ -28,6 +28,7 @@
     import { bookMixin } from '../../utils/mixin'
     import BookSlideContent from './BookSlideContent'
     import BookLoading from './BookLoading'
+    import BookSlideBookmark from './BookSlideBookmark'
 
     export default {
         mixins: [bookMixin],
@@ -38,7 +39,7 @@
             return {
                 currentTable: 1,
                 content: BookSlideContent, // 目录内容组件
-                bookmark: null // 书签组件
+                bookmark: BookSlideBookmark // 书签组件
             }
         },
         methods: {

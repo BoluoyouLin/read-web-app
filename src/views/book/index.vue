@@ -4,6 +4,8 @@
         <book-title></book-title>
         <book-menu></book-menu>
         <bookmark></bookmark>
+        <book-header></book-header>
+        <book-footer></book-footer>
     </div>
 </template>
 
@@ -12,6 +14,8 @@
     import BookTitle from '../../components/book/BookTitle'
     import BookMenu from '../../components/book/BookMenu'
     import Bookmark from '../../components/book/BookBookmark'
+    import BookHeader from '../../components/book/BookHeader'
+    import BookFooter from '../../components/book/BookFooter'
     import { bookMixin } from '../../utils/mixin'
 
     export default {
@@ -20,7 +24,9 @@
             BookReader,
             BookTitle,
             BookMenu,
-            Bookmark
+            Bookmark,
+            BookHeader,
+            BookFooter
         },
         watch: {
             offsetY (value) {

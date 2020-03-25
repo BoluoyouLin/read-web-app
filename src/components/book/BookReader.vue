@@ -25,6 +25,7 @@
     export default {
         mixins: [bookMixin],
         methods: {
+            // 蒙版点击
             maskClick (e) {
                 const offsetX = e.offsetX
                 const width = window.innerWidth
@@ -36,7 +37,9 @@
                     this.toggleTitleAndMenu()
                 }
                 e.preventDefault()
+                e.stopPropagation()
             },
+            // 蒙版下拉
             maskMove (e) {
                 let offsetY = 0
                 if (this.firstOffsetY) {
@@ -48,10 +51,12 @@
                 e.preventDefault()
                 e.stopPropagation()
             },
+            // 蒙版下拉结束
             maskMoveEnd (e) {
                 this.setOffsetY(0)
                 this.firstOffsetY = null
             },
+            // 下一页
             nextPage () {
                 if (this.bookRender) {
                     this.bookRender.next().then(() => {
@@ -60,6 +65,7 @@
                     this.hideTitleAndMenu()
                 }
             },
+            // 上一页
             lastPage () {
                 if (this.bookRender) {
                     this.bookRender.prev().then(() => {
@@ -68,6 +74,7 @@
                     this.hideTitleAndMenu()
                 }
             },
+            // 菜单栏和标题栏状态切换（隐藏和显示）
             toggleTitleAndMenu () {
                 if (this.menuVisible) {
                     this.setSettingVisible(-1)
@@ -75,6 +82,7 @@
                 }
                 this.setMenuVisible(!this.menuVisible)
             },
+            // 初始化字体大小
             initFontSize () {
                 const fontSize = getFontSize(this.fileName)
                 if (fontSize) {
@@ -151,23 +159,6 @@
                     this.updateProgress()
                     this.getInfo()
                 })
-                // this.bookRender.on('touchstart', event => {
-                //     this.startX = event.changedTouches[0].clientX
-                //     this.startTime = event.timeStamp
-                // })
-                // this.bookRender.on('touchend', event => {
-                //     const offsetX = event.changedTouches[0].clientX - this.startX
-                //     const offsetTime = event.timeStamp - this.startTime
-                //     if (offsetTime < 500 && offsetX > 40) {
-                //         this.lastPage()
-                //     } else if (offsetTime < 500 && offsetX < -40) {
-                //         this.nextPage()
-                //     } else {
-                //         this.toggleTitleAndMenu()
-                //     }
-                //     event.preventDefault()
-                //     event.stopPropagation()
-                // }, { passive: true })
                 this.bookRender.hooks.content.register(contents => {
                     Promise.all([
                         contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/cabin.css`),

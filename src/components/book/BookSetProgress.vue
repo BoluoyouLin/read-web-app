@@ -33,18 +33,6 @@
 
     export default {
         mixins: [bookMixin],
-        computed: {
-            getSectionName () {
-                // let sectionName = ''
-                // if (this.section) {
-                //     const sectionObj = this.currentBook.section(this.section)
-                //     if (sectionObj && sectionObj && this.currentBook && this.currentBook.navigation) {
-                //         sectionName = this.currentBook.navigation.get(sectionObj.href).label
-                //     }
-                // }
-                return this.section && this.navigation ? this.navigation[this.section].label : ''
-            }
-        },
         methods: {
             onProgressChange (value) {
                 this.setProgress(value).then(() => {

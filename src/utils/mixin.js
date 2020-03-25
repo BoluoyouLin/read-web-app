@@ -27,6 +27,9 @@ export const bookMixin = {
         ]),
         themeList () {
             return themeList(this)
+        },
+        getSectionName () {
+            return this.section && this.navigation ? this.navigation[this.section].label : ''
         }
     },
     methods: {

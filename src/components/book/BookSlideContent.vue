@@ -26,8 +26,12 @@
                 />
             </div>
             <div class="book-info-center">
-                <div class="book-info-title">{{this.metadata? this.metadata.title: ''}}</div>
-                <div class="book-info-author">{{this.metadata ? this.metadata.creator : ''}}</div>
+                <div class="book-info-title">
+                    <span class="book-info-title-text">{{this.metadata? this.metadata.title: ''}}</span>
+                </div>
+                <div class="book-info-author">
+                    <span class="book-info-author-text">{{this.metadata ? this.metadata.creator : ''}}</span>
+                </div>
             </div>
             <div class="book-info-right">
                 {{$t('book.haveRead2')}}
@@ -86,6 +90,7 @@
                 this.display(href).then(() => {
                     this.hideNavigation()
                     this.updateProgress()
+                    this.hideTitleAndMenu()
                     if (highlight) {
                         this.currentBook.rendition.annotations.highlight(href)
                     }
@@ -188,17 +193,21 @@
             .book-info-center {
                 flex: 1;
                 .book-info-title {
-                    @include ellipsis2(3);
-                    width: px2rem(180.75);
                     font-size: px2rem(14);
                     line-height: px2rem(16);
+                    @include left;
+                    .book-info-title-text {
+                        @include ellipsis2(3);
+                    }
                 }
                 .book-info-author {
                     margin-top: px2rem(5);
-                    @include ellipsis2(2);
-                    width: px2rem(180.75);
                     font-size: px2rem(12);
                     line-height: px2rem(14);
+                    @include left;
+                    .book-info-author-text {
+                        @include ellipsis2(1);
+                    }
                 }
             }
             .book-info-right {

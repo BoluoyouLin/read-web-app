@@ -44,12 +44,6 @@ const actions = {
     setMetadata: ({ commit }, newMetadata) => {
         return commit('SET_METADATA', newMetadata)
     },
-    setPaginate: ({ commit }, newPaginate) => {
-        return commit('SET_PAGINATE', newPaginate)
-    },
-    setPageList: ({ commit }, newPageList) => {
-        return commit('SET_PAGE_LIST', newPageList)
-    },
     setIsBookmark: ({ commit }, newIsBookmark) => {
         return commit('SET_IS_BOOKMARK', newIsBookmark)
     },

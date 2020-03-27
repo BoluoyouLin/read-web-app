@@ -5,6 +5,9 @@
              @click="maskClick"
              @touchmove="maskMove"
              @touchend="maskMoveEnd"
+             @mousedown.left="mouseEnter"
+             @mousemove.left="mouseMove"
+             @mouseup.left="mouseEnd"
         ></div>
     </div>
 </template>
@@ -25,8 +28,53 @@
     export default {
         mixins: [bookMixin],
         methods: {
+            // 鼠标点击进入 1
+            mouseEnter (e) {
+                this.mouseState = 1
+                this.mouseStartTime = e.timeStamp
+                e.preventDefault()
+                e.stopPropagation()
+            },
+            // 鼠标点击进入后移动 2
+            mouseMove (e) {
+                if (this.mouseState === 1) {
+                    this.mouseState = 2
+                } else if (this.mouseState === 2) {
+                    let offsetY = 0
+                    if (this.firstOffsetY) {
+                        offsetY = e.clientY - this.firstOffsetY
+                        this.setOffsetY(offsetY)
+                    } else {
+                        this.firstOffsetY = e.clientY
+                    }
+                }
+                e.preventDefault()
+                e.stopPropagation()
+            },
+            /**
+             * 鼠标移动中松开 3
+             * 鼠标状态复原 4
+             */
+            mouseEnd (e) {
+                if (this.mouseState === 2) {
+                    this.setOffsetY(0)
+                    this.firstOffsetY = null
+                    this.mouseState = 3
+                } else {
+                    this.mouseState = 4
+                }
+                const time = e.timeStamp - this.mouseStartTime
+                if (time < 100) {
+                    this.mouseState = 4
+                }
+                e.preventDefault()
+                e.stopPropagation()
+            },
             // 蒙版点击
             maskClick (e) {
+                if (this.mouseState && (this.mouseState === 2 || this.mouseState === 3)) {
+                    return
+                }
                 const offsetX = e.offsetX
                 const width = window.innerWidth
                 if (offsetX < width * 0.3) {

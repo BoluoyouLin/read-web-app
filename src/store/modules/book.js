@@ -15,8 +15,6 @@ const book = {
         navigation: null,
         cover: null, // 图书封面
         metadata: null, // 图书基本信息
-        paginate: '',
-        pageList: null,
         offsetY: 0,
         isBookmark: null // 当前页是否为书签页
       },
@@ -65,12 +63,6 @@ const book = {
         },
         SET_METADATA: (state, newMetadata) => {
             state.metadata = newMetadata
-        },
-        SET_PAGINATE: (state, newPaginate) => {
-            state.paginate = newPaginate
-        },
-        SET_PAGE_LIST: (state, newPageList) => {
-            state.pageList = newPageList
         },
         SET_OFFSET_Y: (state, newOffsetY) => {
             state.offsetY = newOffsetY

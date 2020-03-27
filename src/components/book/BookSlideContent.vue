@@ -50,7 +50,6 @@
                      :class="{'selected' : index === section}"
                      @click="displayBook(item.href)"
                 >{{item.label}}</div>
-                <div class="navigation-item-page"></div>
             </div>
         </Scroll>
         <Scroll class="search-list-wrapper"
@@ -228,7 +227,6 @@
                     flex: 1;
                     @include ellipsis;
                 }
-                .navigation-item-page {}
             }
         }
         .search-list-wrapper {

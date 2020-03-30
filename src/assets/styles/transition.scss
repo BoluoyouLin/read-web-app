@@ -9,8 +9,10 @@
 .fade-enter-active, .fade-leave-active,
 .slide-right-enter-active, .slide-right-leave-active,
 .wrapper-slide-up-enter-active, .wrapper-slide-up-leave-active,
-.fade-slide-right-enter-active, .fade-slide-right-leave-active {
-  transition: all .3s linear;
+.fade-slide-right-enter-active, .fade-slide-right-leave-active,
+.hide-title-enter-active, .hide-title-leave-active,
+.hot-search-move-enter-active, .hot-search-move-leave-active{
+  transition: all .2s linear;
 }
 .slide-up-enter, .slide-up-leave-to {
   transform: translate3d(0, px2rem(138), 0)
@@ -24,6 +26,7 @@
 .slide-right-enter, .slide-right-leave-to {
   transform: translate3d(-100%, 0, 0);
 }
+
 .wrapper-slide-up-enter, .wrapper-slide-up-leave-to {
   transform: translate3d(0, 100%, 0);
   opacity: 0;
@@ -32,6 +35,7 @@
   transform: translate3d(0, 0, 0);
   opacity: 1;
 }
+// 目录动画
 .fade-slide-right-enter, .fade-slide-right-leave-to {
   transform: translate3d(-100%, 0, 0);
   opacity: 0;
@@ -40,4 +44,22 @@
   transform: translate3d(0, 0, 0);
   opacity: 1;
  }
+// 隐藏标题栏
+.hide-title-enter, .hide-title-leave-to {
+  transform: translate3d(0, px2rem(10), 0);
+  opacity: 0;
+}
+.hide-title-enter-to, .hide-title-leave {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+}
+// 热门搜索动画
+.hot-search-move-enter, .hot-search-move-leave-to {
+  transform: translate3d(0, px2rem(30), 0);
+  opacity: 0;
+}
+.hot-search-move-enter-to, .hot-search-move-leave {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+}
 

@@ -99,3 +99,18 @@ export const bookMixin = {
         }
     }
 }
+
+export const bookMallHomeMixin = {
+    computed: {
+        ...mapGetters([
+            'offsetY',
+            'hotSearchOffsetY'
+        ])
+    },
+    methods: {
+        ...mapActions([
+            'setOffsetY',
+            'setHotSearchOffsetY'
+        ])
+    }
+}

@@ -165,7 +165,6 @@
 <style lang="scss" scoped>
     @import "src/assets/styles/global";
     .book-bookmark {
-        background-color: #bbbbbb;
         position: absolute;
         height: px2rem(40);
         width: 100%;

@@ -1,7 +1,18 @@
 $ratio: 375 / 10;
+$transitionTime: .2s;
+$transitionType: linear;
 
 @function px2rem($px) {
     @return $px / $ratio + rem;
+}
+
+.title {
+    font-size: px2rem(16);
+    font-weight: bold;
+}
+
+.icon {
+    font-size: px2rem(16);
 }
 
 @mixin center {
@@ -34,5 +45,12 @@ $ratio: 375 / 10;
     display: -webkit-box;
     -webkit-line-clamp: $line;
     -webkit-box-orient: vertical;
+}
+
+@mixin columnLeft {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: flex-start;
 }
 

@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/book'
+    redirect: '/bookMall'
   },
   {
     path: '/book',
@@ -15,6 +15,17 @@ const routes = [
       {
         path: ':fileName',
         component: () => import('../components/book/BookReader.vue')
+      }
+    ]
+  },
+  {
+    path: '/bookMall',
+    component: () => import('../views/bookMall/index.vue'),
+    redirect: '/bookMall/home',
+    children: [
+      {
+        path: 'home',
+        component: () => import('../views/bookMall/home')
       }
     ]
   }

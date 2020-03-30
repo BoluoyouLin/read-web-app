@@ -49,6 +49,9 @@ const actions = {
     },
     setOffsetY: ({ commit }, newOffsetY) => {
         return commit('SET_OFFSET_Y', newOffsetY)
+    },
+    setHotSearchOffsetY: ({ commit }, newHotSearchOffsetY) => {
+        return commit('SET_HOT_SEARCH_OFFSET_Y', newHotSearchOffsetY)
     }
 }
 

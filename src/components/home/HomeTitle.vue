@@ -9,7 +9,9 @@
                         <span class="title">{{$t('home.title')}}</span>
                     </div>
                     <div class="home-title-icon-wrapper">
-                        <span class="icon-shake icon"></span>
+                        <span class="icon-shake icon"
+                              @click="showFlipCard"
+                        ></span>
                     </div>
                 </div>
             </transition>
@@ -107,6 +109,9 @@
             back () {
                 this.showTitle()
                 this.hideHotSearchList()
+            },
+            showFlipCard () {
+                this.setFlipCardVisible(true)
             }
         }
     }

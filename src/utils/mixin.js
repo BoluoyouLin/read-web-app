@@ -104,13 +104,15 @@ export const bookMallHomeMixin = {
     computed: {
         ...mapGetters([
             'offsetY',
-            'hotSearchOffsetY'
+            'hotSearchOffsetY',
+            'flipCardVisible'
         ])
     },
     methods: {
         ...mapActions([
             'setOffsetY',
-            'setHotSearchOffsetY'
+            'setHotSearchOffsetY',
+            'setFlipCardVisible'
         ])
     }
 }

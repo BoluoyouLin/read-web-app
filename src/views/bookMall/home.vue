@@ -27,18 +27,22 @@
             <div>1111111111111111111111</div>
             <div>1111111111111111111111</div>
         </Scroll>
+        <random-recommend :data="random"></random-recommend>
     </div>
 </template>
 
 <script>
     import HomeTitle from '../../components/home/HomeTitle'
     import Scroll from '../../components/common/Scroll'
+    import RandomRecommend from '../../components/home/RandomRecommend'
     import { bookMallHomeMixin } from '../../utils/mixin'
+    import { home } from '../../api/store'
     export default {
         mixins: [bookMallHomeMixin],
         components: {
             HomeTitle,
-            Scroll
+            Scroll,
+            RandomRecommend
         },
         methods: {
             onScroll (offsetY) {
@@ -51,8 +55,18 @@
         },
         data () {
             return {
-                top: 100
+                top: 100,
+                random: null
             }
+        },
+        mounted () {
+            home().then(res => {
+                if (res && res.status === 200) {
+                    const random = res.data.random
+                    const index = Math.floor(Math.random() * random.length)
+                    this.random = random[index]
+                }
+            })
         }
     }
 </script>

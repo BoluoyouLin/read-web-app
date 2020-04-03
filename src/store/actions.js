@@ -52,6 +52,9 @@ const actions = {
     },
     setHotSearchOffsetY: ({ commit }, newHotSearchOffsetY) => {
         return commit('SET_HOT_SEARCH_OFFSET_Y', newHotSearchOffsetY)
+    },
+    setFlipCardVisible: ({ commit }, newFlipCardVisible) => {
+        return commit('SET_FLIP_CARD_VISIBLE', newFlipCardVisible)
     }
 }
 

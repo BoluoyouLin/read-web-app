@@ -24,7 +24,24 @@
                 ></div>
             </div>
         </div>
-        <div class="book-card"></div>
+        <div class="book-card" :class="{'animation' : bookCardAnimation}">
+                <div class="book-card-info">
+                    <div class="book-card-img">
+                        <img class="book-cover"
+                             :src="data ? data.cover : ''"
+                        />
+                    </div>
+                    <div class="book-card-title">
+                        <div class="book-title">{{data ? data.title : ''}}</div>
+                    </div>
+                    <div class="book-card-author">
+                        <div class="book-author">{{data ? data.author : ''}}</div>
+                    </div>
+                </div>
+                <div class="book-card-button"
+                     @click.stop="read"
+                >{{$t('home.readNow')}}</div>
+        </div>
         <div class="close-icon-wrapper">
             <span class="icon-close"
                   @click="hideFlipCard"
@@ -50,7 +67,8 @@
                 flipCardAnimation: false,
                 smallBallList: null,
                 smallBallListLength: 18,
-                runSmallBallAnimation: false
+                runSmallBallAnimation: false,
+                bookCardAnimation: false
             }
         },
         watch: {
@@ -69,6 +87,10 @@
             hideFlipCard () {
                 this.setFlipCardVisible(false)
                 this.stopFlipCardAnimation()
+                this.closeBookCardAnimation()
+                if (this.task2) {
+                    clearTimeout(this.task2)
+                }
             },
             // 绑定半圆样式
             circleStyle (item, simple) {
@@ -120,8 +142,9 @@
                 this.task = setInterval(() => {
                     this.flipCardRotate()
                 }, 30)
-                setTimeout(() => {
+                this.task2 = setTimeout(() => {
                     this.stopFlipCardAnimation()
+                    this.startBookCardAnimation()
                 }, 2500)
             },
             // 下一次动画
@@ -172,11 +195,24 @@
                     item.zIndex = 100 - index
                 })
             },
+            // 启动烟花动画
             startSmallBallAnimation () {
                 this.runSmallBallAnimation = true
                 setTimeout(() => {
                     this.runSmallBallAnimation = false
                 }, 750)
+            },
+            // 展示随机推荐图书卡片
+            startBookCardAnimation () {
+                this.bookCardAnimation = true
+            },
+            // 关闭随机推荐图书卡片
+            closeBookCardAnimation () {
+                this.bookCardAnimation = false
+            },
+            // 点击立即阅读
+            read () {
+                this.hideFlipCard()
             }
         },
         created () {
@@ -288,6 +324,79 @@
             z-index: 1000;
             @include center;
             cursor: pointer;
+        }
+        .book-card {
+            @include absoluteCenter;
+            width: 60%;
+            height: 70%;
+            max-height: px2rem(320);
+            min-height: px2rem(220);
+            max-width: px2rem(280);
+            min-width: px2rem(180);
+            background: white;
+            border-radius: px2rem(10);
+            transform: scale(0);
+            display: flex;
+            flex-direction: column;
+            &.animation {
+                animation: book-card-show .3s ease-in both;
+            }
+            @keyframes book-card-show {
+                0% {
+                    transform: scale(0);
+                    opacity: 0;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+            .book-card-info {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                padding: px2rem(20);
+                box-sizing: border-box;
+                flex: 1;
+                @include center;
+                .book-card-img {
+                    .book-cover {
+                        width: px2rem(100);
+                        height: px2rem(120);
+                        max-height: px2rem(180);
+                        text-align: center;
+                        margin-bottom: px2rem(15);
+                    }
+                }
+                .book-card-title {
+                    .book-title {
+                        @include ellipsis2(2);
+                        text-align: center;
+                    }
+                    font-size: px2rem(16);
+                    font-weight: bold;
+                    line-height: px2rem(18);
+                    margin-bottom: px2rem(15);
+                }
+                .book-card-author {
+                    .book-author {
+                        @include ellipsis2(2);
+                        text-align: center;
+                    }
+                    font-size: px2rem(10);
+                    line-height: px2rem(12);
+                    margin-bottom: px2rem(15);
+                }
+            }
+            .book-card-button {
+                font-size: px2rem(14);
+                color: #fff;
+                border-radius: 0 0 px2rem(10) px2rem(10);
+                flex: 0 0 px2rem(45);
+                width: 100%;
+                background-color: #409EFF;
+                @include center;
+            }
         }
     }
 </style>

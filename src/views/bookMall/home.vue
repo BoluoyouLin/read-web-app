@@ -65,6 +65,7 @@
                     const random = res.data.random
                     const index = Math.floor(Math.random() * random.length)
                     this.random = random[index]
+                    console.log(random[index])
                 }
             })
         }

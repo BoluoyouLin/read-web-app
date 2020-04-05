@@ -63,3 +63,16 @@ $transitionType: linear;
     margin: auto;
 }
 
+@mixin top {
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+}
+
+@mixin columnCenter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+

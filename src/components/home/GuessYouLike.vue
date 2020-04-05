@@ -16,13 +16,13 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import TitleView from './Title'
-  import { realPx } from '@/utils/utils'
-  import { storeHomeMixin } from '../../utils/mixin'
+  import { realPx } from '../../utils/utils'
+  import { bookMallHomeMixin } from '../../utils/mixin'
 
   export default {
-    mixins: [storeHomeMixin],
+    mixins: [bookMallHomeMixin],
     components: {
       TitleView
     },
@@ -30,15 +30,15 @@
       data: Array
     },
     watch: {
-      data(v) {
+      data (v) {
         this.total = v.length / 3
       }
     },
     computed: {
-      width() {
+      width () {
         return window.innerWidth - realPx(20) - realPx(60) + 'px'
       },
-      showData() {
+      showData () {
         if (this.data) {
           return [
             this.data[this.index],
@@ -50,21 +50,21 @@
         }
       }
     },
-    data() {
+    data () {
       return {
         index: 0,
         total: 0
       }
     },
     methods: {
-      change() {
+      change () {
         if (this.index + 1 >= this.total) {
           this.index = 0
         } else {
           this.index++
         }
       },
-      resultText(item) {
+      resultText (item) {
         if (item && item.type && item.result) {
           switch (item.type) {
             case 1:
@@ -76,7 +76,7 @@
           }
         }
       },
-      resize() {
+      resize () {
         this.$nextTick(() => {
           this.$refs.title.forEach(item => {
             item.style.width = this.width
@@ -93,7 +93,7 @@
   }
 </script>
 
-<style lang="scss" rel="stylesheet/scss" scoped>
+<style lang="scss" scoped>
   @import "../../assets/styles/global";
 
   .guess-you-like {

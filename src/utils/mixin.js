@@ -113,6 +113,7 @@ export const bookMallHomeMixin = {
             'setOffsetY',
             'setHotSearchOffsetY',
             'setFlipCardVisible'
-        ])
+        ]),
+        showBookMore () {}
     }
 }

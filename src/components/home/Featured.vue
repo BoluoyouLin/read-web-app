@@ -18,14 +18,14 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import TitleView from './Title'
-  import { realPx } from '@/utils/utils'
-  import { categoryText } from '../../utils/store'
-  import { storeHomeMixin } from '../../utils/mixin'
+  import { realPx } from '../../utils/utils'
+  import { categoryText } from '../../utils/bookMall'
+  import { bookMallHomeMixin } from '../../utils/mixin'
 
   export default {
-    mixins: [storeHomeMixin],
+    mixins: [bookMallHomeMixin],
     components: {
       TitleView
     },
@@ -43,15 +43,15 @@
       }
     },
     computed: {
-      width() {
+      width () {
         return window.innerWidth - realPx(20) - realPx(60) + 'px'
       }
     },
     methods: {
-      categoryText(category) {
+      categoryText (category) {
         return categoryText(category, this)
       },
-      resize() {
+      resize () {
         this.$nextTick(() => {
           this.$refs.title.forEach(item => {
             item.style.width = this.width

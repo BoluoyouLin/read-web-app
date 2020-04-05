@@ -17,10 +17,10 @@
 
 <script type="text/ecmascript-6">
   import TitleView from './Title'
-  import { storeHomeMixin } from '../../utils/mixin'
+  import { bookMallHomeMixin } from '../../utils/mixin'
 
   export default {
-    mixins: [storeHomeMixin],
+    mixins: [bookMallHomeMixin],
     components: {
       TitleView
     },

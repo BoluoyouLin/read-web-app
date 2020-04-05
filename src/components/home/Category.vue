@@ -20,9 +20,9 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import TitleView from './Title'
-  import { categoryText, getCategoryName } from '../../utils/store'
+  import { categoryText, getCategoryName } from '../../utils/bookMall'
 
   export default {
     components: {
@@ -32,7 +32,7 @@
       data: Array
     },
     methods: {
-      showBookCategory(item) {
+      showBookCategory (item) {
         this.$router.push({
           path: '/store/list',
           query: {
@@ -41,10 +41,10 @@
           }
         })
       },
-      categoryText(category) {
+      categoryText (category) {
         return categoryText(category, this)
       },
-      showBookList() {
+      showBookList () {
         this.$router.push('/store/list')
       }
     }

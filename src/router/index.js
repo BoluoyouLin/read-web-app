@@ -26,6 +26,14 @@ const routes = [
       {
         path: 'home',
         component: () => import('../views/bookMall/home')
+      },
+      {
+        path: 'list',
+        component: () => import('../views/bookMall/StoreList')
+      },
+      {
+        path: 'detail',
+        component: () => import('../views/bookMall/StoreDetail')
       }
     ]
   }

@@ -72,7 +72,7 @@
         mounted () {
             home().then(res => {
                 if (res && res.status === 200) {
-                    console.log(res.data)
+                    // console.log(res.data)
                     const random = res.data.random
                     const index = Math.floor(Math.random() * random.length)
                     this.random = random[index]

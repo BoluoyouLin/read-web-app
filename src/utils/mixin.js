@@ -114,6 +114,14 @@ export const bookMallHomeMixin = {
             'setHotSearchOffsetY',
             'setFlipCardVisible'
         ]),
-        showBookMore () {}
+        showBookDetail (book) {
+            this.$router.push({
+                path: '/bookMall/detail',
+                query: {
+                    fileName: book.fileName,
+                    categoryText: book.categoryText
+                }
+            })
+        }
     }
 }

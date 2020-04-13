@@ -160,14 +160,14 @@
       },
       readBook () {
         this.$router.push({
-          path: `/ebook/${this.categoryText}|${this.fileName}`
+          path: `/book/${this.categoryText}|${this.fileName}`
         })
       },
       trialListening () {
       },
       read (item) {
         this.$router.push({
-          path: `/ebook/${this.categoryText}|${this.fileName}`
+          path: `/book/${this.categoryText}|${this.fileName}`
         })
       },
       itemStyle (item) {
@@ -215,7 +215,7 @@
       },
       init () {
         this.fileName = this.$route.query.fileName
-        this.categoryText = this.$route.query.category
+        this.categoryText = this.$route.query.categoryText
         if (this.fileName) {
           detail({
             fileName: this.fileName

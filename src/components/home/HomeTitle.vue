@@ -32,6 +32,7 @@
                            v-model="searchText"
                            class="search-input"
                            @click="showHotSearchListVisible"
+                           @keyup.13.exact="search"
                     />
                 </div>
             </div>
@@ -112,6 +113,14 @@
             },
             showFlipCard () {
                 this.setFlipCardVisible(true)
+            },
+            search () {
+                this.$router.push({
+                    path: '/bookMall/list',
+                    query: {
+                        keyword: this.searchText
+                    }
+                })
             }
         }
     }

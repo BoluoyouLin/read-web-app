@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import TitleView from './Title'
   import { bookMallHomeMixin } from '../../utils/mixin'
 

@@ -213,6 +213,13 @@
             // 点击立即阅读
             read () {
                 this.hideFlipCard()
+                this.$router.push({
+                    path: '/bookMall/detail',
+                    query: {
+                        fileName: this.data.fileName,
+                        categoryText: this.data.categoryText
+                    }
+                })
             }
         },
         created () {

@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import { realPx } from '../../utils/utils'
 
   export default {

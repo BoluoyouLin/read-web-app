@@ -1,4 +1,5 @@
 const actions = {
+    // book
     setFontFamilyVisible: ({ commit }, newVisible) => {
         return commit('SET_FONT_FAMILY_VISIBLE', newVisible)
     },
@@ -50,11 +51,25 @@ const actions = {
     setOffsetY: ({ commit }, newOffsetY) => {
         return commit('SET_OFFSET_Y', newOffsetY)
     },
+    // bookMall
     setHotSearchOffsetY: ({ commit }, newHotSearchOffsetY) => {
         return commit('SET_HOT_SEARCH_OFFSET_Y', newHotSearchOffsetY)
     },
     setFlipCardVisible: ({ commit }, newFlipCardVisible) => {
         return commit('SET_FLIP_CARD_VISIBLE', newFlipCardVisible)
+    },
+    // shelf
+    setIsEditMode: ({ commit }, newIsEditMode) => {
+        return commit('SET_IS_EDIT_MODE', newIsEditMode)
+    },
+    setShelfList: ({ commit }, newList) => {
+        return commit('SET_SHELF_LIST', newList)
+    },
+    setShelfSelected: ({ commit }, newSelected) => {
+        return commit('SET_SHELF_SELECTED', newSelected)
+    },
+    setShelfTitleVisible: ({ commit }, newVisible) => {
+        return commit('SET_SHELF_TITLE_VISIBLE', newVisible)
     }
 }
 

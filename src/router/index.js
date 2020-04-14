@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/bookMall'
+    redirect: '/shelf'
   },
   {
     path: '/book',
@@ -36,6 +36,10 @@ const routes = [
         component: () => import('../views/bookMall/StoreDetail')
       }
     ]
+  },
+  {
+    path: '/shelf',
+    component: () => import('../views/shelf/Shelf')
   }
 ]
 

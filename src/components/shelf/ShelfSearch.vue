@@ -1,5 +1,5 @@
 <template>
-    <div class="shelf-search">
+    <div class="shelf-search" :class="{'search-fixed' : inputClick, 'hide-shadow': isHideShadow}">
         <div class="shelf-search-box" :class="{'search-top' : inputClick}">
             <div class="shelf-search-wrapper">
                 <div class="icon-search-wrapper">
@@ -52,7 +52,8 @@
             return {
                 inputClick: false,
                 searchText: '',
-                currentSubItem: 1
+                currentSubItem: 1,
+                isHideShadow: true
             }
         },
         computed: {
@@ -74,6 +75,15 @@
                         text: this.$t('shelf.purchase')
                     }
                 ]
+            }
+        },
+        watch: {
+            offsetY (value) {
+                if (value > 0 && this.inputClick) {
+                    this.isHideShadow = false
+                } else {
+                    this.isHideShadow = true
+                }
             }
         },
         methods: {
@@ -113,6 +123,15 @@
         height: px2rem(94);
         background-color: #ffffff;
         display: flex;
+        box-shadow: 0 px2rem(2) px2rem(2) 0 rgba(0, 0, 0, .1);
+        &.hide-shadow {
+            box-shadow: none;
+        }
+        &.search-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
         .shelf-search-box {
             position: absolute;
             z-index: 105;

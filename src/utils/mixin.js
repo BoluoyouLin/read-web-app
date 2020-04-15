@@ -132,7 +132,8 @@ export const shelfMixin = {
             'isEditMode',
             'shelfList',
             'shelfSelected',
-            'shelfTitleVisible'
+            'shelfTitleVisible',
+            'offsetY'
         ])
     },
     methods: {
@@ -140,7 +141,8 @@ export const shelfMixin = {
             'setIsEditMode',
             'setShelfList',
             'setShelfSelected',
-            'setShelfTitleVisible'
+            'setShelfTitleVisible',
+            'setOffsetY'
         ])
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <transition name="hide-title">
-        <div class="shelf-title" v-show="shelfTitleVisible">
+        <div class="shelf-title" v-show="shelfTitleVisible" :class="{'hide-shadow' : isHideShadow}">
             <div class="shelf-title-text-wrapper">
                 <span class="shelf-title-text">{{$t('shelf.title')}}</span>
                 <span class="shelf-title-sub-text" v-show="isEditMode">{{selectText}}</span>
@@ -32,12 +32,26 @@
                 }
             }
         },
+        data () {
+            return {
+                isHideShadow: true
+            }
+        },
         methods: {
             onEditClick () {
                 this.setIsEditMode(!this.isEditMode)
             },
             clearCache () {
                 console.log('clear cache')
+            }
+        },
+        watch: {
+            offsetY (value) {
+                if (value > 0) {
+                    this.isHideShadow = false
+                } else {
+                    this.isHideShadow = true
+                }
             }
         }
     }
@@ -51,6 +65,10 @@
         height: px2rem(42);
         width: 100%;
         background-color: #fff;
+        box-shadow: 0 px2rem(2) px2rem(2) 0 rgba(0, 0, 0, .1);
+        &.hide-shadow {
+            box-shadow: none;
+        }
         .shelf-title-text-wrapper {
             position: absolute;
             top: 0;

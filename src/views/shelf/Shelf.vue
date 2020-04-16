@@ -1,10 +1,11 @@
 <template>
     <div class="shelf">
         <shelf-title></shelf-title>
-        <scroll class="shelf-scroll" :top="0" @onScroll="onScroll">
+        <scroll class="shelf-scroll" :top="0" :bottom="scrollBottom" @onScroll="onScroll" ref="scroll">
             <shelf-search></shelf-search>
             <shelf-list></shelf-list>
         </scroll>
+        <shelf-footer></shelf-footer>
     </div>
 </template>
 
@@ -15,20 +16,36 @@
     import ShelfSearch from '../../components/shelf/ShelfSearch'
     import { shelf } from '../../api/store'
     import ShelfList from '../../components/shelf/ShelfList'
+    import { addToShelf } from '../../utils/shelf'
+    import ShelfFooter from '../../components/shelf/ShelfFooter'
 
     export default {
         mixins: [shelfMixin],
         components: {
+            ShelfFooter,
             ShelfList,
             Scroll,
             ShelfTitle,
             ShelfSearch
         },
+        data () {
+            return {
+                scrollBottom: 0
+            }
+        },
+        watch: {
+            isEditMode (value) {
+                this.scrollBottom = value ? 48 : 0
+                this.$nextTick(() => {
+                    this.$refs.scroll.refresh()
+                })
+            }
+        },
         methods: {
             getShelfList () {
                 shelf().then(res => {
                     if (res.status === 200 && res.data && res.data.bookList) {
-                        this.setShelfList(res.data.bookList)
+                        this.setShelfList(addToShelf(res.data.bookList))
                     }
                 })
             },

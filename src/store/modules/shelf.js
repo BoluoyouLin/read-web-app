@@ -13,7 +13,7 @@ const shelf = {
             state.shelfList = newList
         },
         SET_SHELF_SELECTED: (state, newSelected) => {
-            state.selected = newSelected
+            state.shelfSelected = newSelected
         },
         SET_SHELF_TITLE_VISIBLE: (state, newVisible) => {
             state.shelfTitleVisible = newVisible

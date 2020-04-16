@@ -108,8 +108,12 @@
                 })
             },
             back () {
-                this.showTitle()
-                this.hideHotSearchList()
+                if (this.titleVisible) {
+                    this.$router.push('/shelf')
+                } else {
+                    this.showTitle()
+                    this.hideHotSearchList()
+                }
             },
             showFlipCard () {
                 this.setFlipCardVisible(true)

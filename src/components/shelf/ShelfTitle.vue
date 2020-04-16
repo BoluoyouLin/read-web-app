@@ -40,6 +40,9 @@
         methods: {
             onEditClick () {
                 this.setIsEditMode(!this.isEditMode)
+                if (!this.isEditMode) {
+                    this.clearShelfSelected()
+                }
             },
             clearCache () {
                 console.log('clear cache')

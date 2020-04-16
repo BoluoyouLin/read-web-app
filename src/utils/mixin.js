@@ -143,6 +143,21 @@ export const shelfMixin = {
             'setShelfSelected',
             'setShelfTitleVisible',
             'setOffsetY'
-        ])
+        ]),
+        showBookDetail (book) {
+            this.$router.push({
+                path: '/bookMall/detail',
+                query: {
+                    fileName: book.fileName,
+                    categoryText: book.categoryText
+                }
+            })
+        },
+        clearShelfSelected () {
+            this.setShelfSelected([])
+            this.shelfList.forEach(item => {
+                item.selected = false
+            })
+        }
     }
 }

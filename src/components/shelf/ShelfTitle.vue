@@ -17,6 +17,8 @@
 
 <script>
     import { shelfMixin } from '../../utils/mixin'
+    import { clearLocalForage } from '../../utils/localForage'
+    import { clearLocalStorage } from '../../utils/localStorage'
 
     export default {
         mixins: [shelfMixin],
@@ -44,8 +46,16 @@
                     this.clearShelfSelected()
                 }
             },
+            // 清除缓存
             clearCache () {
-                console.log('clear cache')
+                clearLocalForage()
+                clearLocalStorage()
+                this.setShelfList([])
+                this.setShelfSelected([])
+                this.getShelfList()
+                this.toast({
+                    text: this.$t('shelf.clearCacheSuccess')
+                }).show()
             }
         },
         watch: {

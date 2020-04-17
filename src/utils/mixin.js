@@ -1,6 +1,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import { addCSS, removeAllCSS, themeList } from './book'
-import { getBookmark, setBookLocation } from './localStorage'
+import { getBookmark, getBookShelf, setBookLocation, setBookShelf } from './localStorage'
+import { shelf } from '../api/store'
+import { addToShelf } from './shelf'
 
 export const bookMixin = {
     computed: {
@@ -158,6 +160,20 @@ export const shelfMixin = {
             this.shelfList.forEach(item => {
                 item.selected = false
             })
+        },
+        getShelfList () {
+            const shelfList = getBookShelf()
+            if (shelfList) {
+                this.setShelfList(shelfList)
+            } else {
+                shelf().then(res => {
+                    if (res.status === 200 && res.data && res.data.bookList) {
+                        const data = addToShelf(res.data.bookList)
+                        setBookShelf(data)
+                        this.setShelfList(data)
+                    }
+                })
+            }
         }
     }
 }

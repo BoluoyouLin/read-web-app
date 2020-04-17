@@ -23,7 +23,9 @@
 
 <script>
     import { shelfMixin } from '../../utils/mixin'
-    import { setBookShelf } from '../../utils/localStorage'
+    import { setBookShelf, deleteLocalStorage } from '../../utils/localStorage'
+    import { download } from '../../api/store'
+    import { removeLocalForage } from '../../utils/localForage'
 
     export default {
         mixins: [shelfMixin],
@@ -72,6 +74,7 @@
             }
         },
         methods: {
+            // 设置私密阅读
             setPrivate () {
                 let isPrivate
                 if (this.isPrivate) {
@@ -96,7 +99,8 @@
                     }).show()
                 }
             },
-            showPrivate () {
+            // 展示私密阅读菜单
+            showPrivateRead () {
                 this.popueMenu = this.popup({
                     title: this.isPrivate ? this.$t('shelf.closePrivateTitle') : this.$t('shelf.setPrivateTitle'),
                     buttons: [
@@ -117,9 +121,11 @@
                     ]
                 }).show()
             },
+            // 隐藏弹窗
             hidePopup () {
                 this.popueMenu.hide()
             },
+            // 展示缓存菜单
             showDownload () {
                 this.popueMenu = this.popup({
                     title: this.isDownload ? this.$t('shelf.removeDownloadTitle') : this.$t('shelf.setDownloadTitle'),
@@ -141,33 +147,71 @@
                     ]
                 }).show()
             },
-            setDownload () {
-                let isDownload
-                if (this.isDownload) {
-                    isDownload = false
-                } else {
-                    isDownload = true
-                }
-                this.shelfSelected.forEach(item => {
-                    item.cache = isDownload
+            // 删除选中图书缓存
+            removerSelectedBook () {
+                Promise.all(this.shelfSelected.map(book => this.removeBook(book))).then(books => {
+                    books.map(book => {
+                        book.cache = false
+                    })
+                    setBookShelf(this.shelfList)
+                    const toast = this.toast({
+                        text: this.$t('shelf.removeDownloadSuccess')
+                    })
+                    toast.show()
+                    toast.updateCurrentText(this.$t('shelf.removeDownloadSuccess'))
                 })
-                this.downloadSelectBook() // 下载图书
+            },
+            // 删除图书缓存
+            removeBook (book) {
+                return new Promise((resolve, reject) => {
+                    removeLocalForage(`${book.fileName}`)
+                    deleteLocalStorage(`${book.categoryText}/${book.fileName}-info`)
+                    resolve(book)
+                })
+            },
+            // 缓存选中图书
+            async setDownload () {
+                if (this.isDownload) {
+                    this.removerSelectedBook()
+                } else {
+                    await this.downloadSelectBook() // 下载图书
+                    this.toast({
+                        text: this.$t('shelf.setDownloadSuccess')
+                    }).show()
+                }
                 this.hidePopup()
                 this.setIsEditMode(false)
                 this.clearShelfSelected()
                 setBookShelf(this.shelfList)
-                if (isDownload) {
-                    this.toast({
-                        text: this.$t('shelf.setDownloadSuccess')
-                    }).show()
-                } else {
-                    this.toast({
-                        text: this.$t('shelf.removeDownloadSuccess')
-                    }).show()
+            },
+            // 下载选中的图书
+            async downloadSelectBook () {
+                for (let i = 0; i < this.shelfSelected.length; i++) {
+                    await this.downloadBook(this.shelfSelected[i]).then(book => {
+                        book.cache = true
+                    })
                 }
             },
-            // todo
-            downloadSelectBook () {},
+            // 下载图书
+            downloadBook (book) {
+                let text = ''
+                const toast = this.toast({
+                    text
+                })
+                toast.continueShow()
+                return new Promise((resolve, reject) => {
+                    download(book, book => {
+                        console.log('下载成功')
+                        toast.remove()
+                        resolve(book)
+                    }, reject, res => {
+                        const progress = Math.floor(res.loaded / res.total * 100) + '%'
+                        text = this.$t('shelf.progressDownload').replace('$1', `${book.fileName}.epub(${progress})`)
+                        toast.updateCurrentText(text)
+                    })
+                })
+            },
+            // 展示移出书架菜单
             showRemoveShelf () {
                 let title
                 if (this.shelfSelected.length === 1) {
@@ -182,7 +226,7 @@
                             type: 'danger',
                             text: this.$t('shelf.removeBook'),
                             click: () => {
-                                this.removeSelected()
+                                this.removeShelfBook()
                             }
                         },
                         {
@@ -195,7 +239,8 @@
                     ]
                 }).show()
             },
-            removeSelected () {
+            // 移出书架
+            removeShelfBook () {
                 this.shelfSelected.forEach(item => {
                     this.setShelfList(this.shelfList.filter(book => book !== item))
                 })
@@ -204,13 +249,14 @@
                 this.clearShelfSelected()
                 setBookShelf(this.shelfList)
             },
+            // 点击底部栏
             clickTab (item) {
                 if (!this.isSelected) {
                     return
                 }
                 switch (item.id) {
                     case 1:
-                        this.showPrivate()
+                        this.showPrivateRead()
                         break
                     case 2:
                         this.showDownload()

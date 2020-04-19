@@ -42,7 +42,9 @@
             isEditMode (value) {
                 this.scrollBottom = value ? 48 : 0
                 this.$nextTick(() => {
-                    this.$refs.scroll.refresh()
+                    if (this.$refs.scroll && this.$refs.scroll.refresh) {
+                        this.$refs.scroll.refresh()
+                    }
                 })
             }
         },

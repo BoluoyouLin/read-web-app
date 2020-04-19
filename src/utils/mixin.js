@@ -169,6 +169,7 @@ export const shelfMixin = {
                     })
                 }
             })
+            setBookShelf(this.shelfList)
         },
         getDirectoryList (title) {
             this.getShelfList().then(() => {

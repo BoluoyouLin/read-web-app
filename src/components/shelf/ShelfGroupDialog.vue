@@ -39,7 +39,6 @@
   import BookDialog from '../common/Dialog'
   import { shelfMixin } from '../../utils/mixin'
   import { removeToShelf, addToShelf } from '../../utils/shelf'
-  import { setBookShelf } from '../../utils/localStorage'
 
   export default {
     name: 'shelf-group-dialog',
@@ -159,7 +158,6 @@
         }
       },
       onComplete () {
-        setBookShelf(this.shelfList)
         this.hide()
         this.clearShelfSelected()
         this.setIsEditMode(false)

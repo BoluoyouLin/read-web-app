@@ -41,7 +41,7 @@
         },
         methods: {
             clickItem () {
-                if (this.isEditMode) {
+                if (this.isEditMode && this.data.type === 1) {
                     this.data.selected = !this.data.selected
                     if (this.data.selected) {
                         this.shelfSelected.pushNoRepeat(this.data)
@@ -49,16 +49,16 @@
                         this.setShelfSelected(this.shelfSelected.filter(item => item.id !== this.data.id))
                     }
                 } else {
-                    if (this.data.type === 1) {
+                    if (this.data.type === 1 && !this.isEditMode) {
                         this.showBookDetail(this.data)
-                    } else if (this.data.type === 2) {
+                    } else if (this.data.type === 2 && !this.isEditMode) {
                         this.$router.push({
                             path: '/directory',
                             query: {
                                 title: this.data.title
                             }
                         })
-                    } else {
+                    } else if (this.data.type === 3) {
                         goBookMall(this)
                     }
                 }

@@ -1,10 +1,13 @@
 <template>
-    <div class="shelf">
-        <shelf-title :title="$t('shelf.title')"></shelf-title>
-        <scroll class="shelf-scroll" :top="0" :bottom="scrollBottom" @onScroll="onScroll" ref="scroll">
-            <shelf-search></shelf-search>
-            <shelf-list :data="shelfList"></shelf-list>
+    <div class="shelf-directory">
+        <shelf-title :title="shelfDirectory.title"
+        ></shelf-title>
+        <scroll class="shelf-scroll" :top="0" :bottom="scrollBottom" @onScroll="onScroll" ref="scroll" v-if="ifShowDirectoryList">
+            <shelf-list :top="42" :data="shelfDirectory.itemList"></shelf-list>
         </scroll>
+        <div v-else class="shelf-directory-none">
+            {{$t('shelf.groupNone')}}
+        </div>
         <shelf-footer></shelf-footer>
     </div>
 </template>
@@ -13,22 +16,26 @@
     import ShelfTitle from '../../components/shelf/ShelfTitle'
     import { shelfMixin } from '../../utils/mixin'
     import Scroll from '../../components/common/Scroll'
-    import ShelfSearch from '../../components/shelf/ShelfSearch'
     import ShelfList from '../../components/shelf/ShelfList'
     import ShelfFooter from '../../components/shelf/ShelfFooter'
 
     export default {
+        name: 'directory',
         mixins: [shelfMixin],
         components: {
             ShelfFooter,
             ShelfList,
             Scroll,
-            ShelfTitle,
-            ShelfSearch
+            ShelfTitle
         },
         data () {
             return {
                 scrollBottom: 0
+            }
+        },
+        computed: {
+            ifShowDirectoryList () {
+                return this.shelfDirectory.itemList && this.shelfDirectory.itemList.length > 0
             }
         },
         watch: {
@@ -45,15 +52,15 @@
             }
         },
         mounted () {
-            this.getShelfList()
-            this.setShelfDirectory([])
-            this.setCurrentType(1)
+            this.getDirectoryList(this.$route.query.title)
+            this.setCurrentType(2)
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .shelf {
+    @import "src/assets/styles/global";
+    .shelf-directory {
         position: relative;
         z-index: 100;
         width: 100%;
@@ -65,6 +72,16 @@
             top: 0;
             z-index: 101;
             width: 100%;
+        }
+        .shelf-directory-none {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            font-size: px2rem(14);
+            color: #666;
+            @include center;
         }
     }
 </style>

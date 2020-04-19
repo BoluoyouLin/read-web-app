@@ -24,7 +24,9 @@ const book = {
     isEditMode: state => state.shelf.isEditMode,
     shelfList: state => state.shelf.shelfList,
     shelfSelected: state => state.shelf.shelfSelected,
-    shelfTitleVisible: state => state.shelf.shelfTitleVisible
+    shelfTitleVisible: state => state.shelf.shelfTitleVisible,
+    shelfDirectory: state => state.shelf.shelfDirectory,
+    currentType: state => state.shelf.currentType
 }
 
 export default book

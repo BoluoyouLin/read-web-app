@@ -3,7 +3,9 @@ const shelf = {
         isEditMode: false, // 是否进入编辑模式
         shelfList: [], // 书架图书列表
         shelfSelected: [], // 书架选中图书列表
-        shelfTitleVisible: true // 书架标题显示状态
+        shelfTitleVisible: true, // 书架标题显示状态
+        shelfDirectory: [],
+        currentType: 1
     },
     mutations: {
         SET_IS_EDIT_MODE: (state, newIsEditMode) => {
@@ -17,6 +19,12 @@ const shelf = {
         },
         SET_SHELF_TITLE_VISIBLE: (state, newVisible) => {
             state.shelfTitleVisible = newVisible
+        },
+        SET_SHELF_DIRECTORY: (state, directory) => {
+            state.shelfDirectory = directory
+        },
+        SET_CURRENT_TYPE: (state, type) => {
+            state.currentType = type
         }
     }
 }

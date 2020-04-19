@@ -40,6 +40,10 @@ const routes = [
   {
     path: '/shelf',
     component: () => import('../views/shelf/Shelf')
+  },
+  {
+    path: '/directory',
+    component: () => import('../views/shelf/Directory')
   }
 ]
 

@@ -89,14 +89,13 @@
                 this.setIsEditMode(false)
                 this.clearShelfSelected()
                 setBookShelf(this.shelfList)
+                const toast = this.toast()
                 if (isPrivate) {
-                    this.toast({
-                        text: this.$t('shelf.setPrivateSuccess')
-                    }).show()
+                    toast.show()
+                    toast.updateCurrentText(this.$t('shelf.setPrivateSuccess'))
                 } else {
-                    this.toast({
-                        text: this.$t('shelf.closePrivateSuccess')
-                    }).show()
+                    toast.show()
+                    toast.updateCurrentText(this.$t('shelf.closePrivateSuccess'))
                 }
             },
             // 展示私密阅读菜单
@@ -262,6 +261,7 @@
                         this.showDownload()
                         break
                     case 3:
+                        this.dialog().show()
                         break
                     case 4:
                         this.showRemoveShelf()

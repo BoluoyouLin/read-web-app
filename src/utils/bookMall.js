@@ -1,3 +1,5 @@
+import { getLocalStorage } from './localStorage'
+
 export const flipCardList = [
     {
         r: 255,
@@ -177,4 +179,37 @@ export const categoryList = {
     PoliticalScienceAndInternationalRelations: 20,
     Psychology: 21,
     Statistics: 22
+}
+
+export function flatBookList (bookList) {
+    if (bookList) {
+        let orgBookList = bookList.filter(item => {
+            return item.type !== 3
+        })
+        const categoryList = bookList.filter(item => {
+            return item.type === 2
+        })
+        categoryList.forEach(item => {
+            const index = orgBookList.findIndex(v => {
+                return v.id === item.id
+            })
+            if (item.itemList) {
+                item.itemList.forEach(subItem => {
+                    orgBookList.splice(index, 0, subItem)
+                })
+            }
+        })
+        orgBookList.forEach((item, index) => {
+            item.id = index + 1
+        })
+        orgBookList = orgBookList.filter(item => item.type !== 2)
+        return orgBookList
+    } else {
+        return []
+    }
+}
+
+export function findBook (fileName) {
+    const bookList = getLocalStorage('shelf')
+    return flatBookList(bookList).find(item => item.fileName === fileName)
 }

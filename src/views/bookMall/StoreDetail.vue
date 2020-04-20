@@ -81,6 +81,7 @@
   import { detail } from '../../api/store'
   import { px2rem, realPx } from '../../utils/utils'
   import Epub from 'epubjs'
+  import { getLocalForage } from '../../utils/localForage'
 
   global.ePub = Epub
 
@@ -157,6 +158,7 @@
       showToast (text) {
         this.toastText = text
         this.$refs.toast.show()
+        this.$refs.toast.updateCurrentText(text)
       },
       readBook () {
         this.$router.push({
@@ -164,6 +166,24 @@
         })
       },
       trialListening () {
+        getLocalForage(this.fileName, (err, blob) => {
+          if (!err && blob && blob instanceof Blob) {
+            this.$router.push({
+              path: '/bookMall/speaking',
+              query: {
+                fileName: this.fileName
+              }
+            })
+          } else {
+            this.$router.push({
+              path: '/bookMall/speaking',
+              query: {
+                fileName: this.fileName,
+                opf: this.opf
+              }
+            })
+          }
+        })
       },
       read (item) {
         this.$router.push({
@@ -341,6 +361,7 @@
         box-sizing: border-box;
         #audio {
           width: 100%;
+          height: 100%;
         }
       }
     }

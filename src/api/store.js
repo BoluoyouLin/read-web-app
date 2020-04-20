@@ -12,7 +12,9 @@ export function detail (book) {
     return axios({
         method: 'get',
         url: `${process.env.VUE_APP_ONLINE_URL}/book/detail`,
-        params: book.fileName
+        params: {
+            fileName: book.fileName
+        }
     })
 }
 
@@ -52,5 +54,12 @@ export function download (book, successCallback, errorCallback, progressCallback
         })
     }).catch(err => {
         if (errorCallback) errorCallback(err)
+    })
+}
+
+export function flatList () {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_ONLINE_URL}/book/flat-list`
     })
 }

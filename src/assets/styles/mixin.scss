@@ -73,7 +73,7 @@ $transitionType: linear;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-content: center;
+    align-items: center;
 }
 
 @mixin scroll {
@@ -91,3 +91,9 @@ $transitionType: linear;
     align-items: flex-end;
 }
 
+@mixin columnTop {
+    display: flex;
+    flex-direction: column;
+    justify-self: flex-start;
+    align-items: center;
+}

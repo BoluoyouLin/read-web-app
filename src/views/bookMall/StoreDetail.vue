@@ -51,15 +51,15 @@
           </div>
         </div>
       </div>
-      <div class="book-detail-content-wrapper">
-        <div class="book-detail-content-title">{{$t('detail.trial')}}</div>
-        <div class="book-detail-content-list-wrapper">
-          <div class="loading-text-wrapper" v-if="!this.displayed">
-            <span class="loading-text">{{$t('detail.loading')}}</span>
-          </div>
-        </div>
-        <div id="preview" v-show="this.displayed" ref="preview"></div>
-      </div>
+<!--      <div class="book-detail-content-wrapper">-->
+<!--        <div class="book-detail-content-title">{{$t('detail.trial')}}</div>-->
+<!--        <div class="book-detail-content-list-wrapper">-->
+<!--          <div class="loading-text-wrapper" v-if="!this.displayed">-->
+<!--            <span class="loading-text">{{$t('detail.loading')}}</span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div id="preview" v-show="this.displayed" ref="preview"></div>-->
+<!--      </div>-->
     </scroll>
     <div class="bottom-wrapper">
       <div class="bottom-btn" @click.stop.prevent="readBook()">{{$t('detail.read')}}</div>
@@ -82,10 +82,14 @@
   import { px2rem, realPx } from '../../utils/utils'
   import Epub from 'epubjs'
   import { getLocalForage } from '../../utils/localForage'
+  import { addBookToShelf, deleteBookInShelf } from '../../utils/shelf'
+  import { getBookShelf, setBookShelf } from '../../utils/localStorage'
+  import { shelfMixin } from '../../utils/mixin'
 
   global.ePub = Epub
 
   export default {
+    mixins: [shelfMixin],
     components: {
       DetailTitle,
       Scroll,
@@ -123,10 +127,10 @@
         return this.metadata ? this.metadata.creator : ''
       },
       inBookShelf () {
-        if (this.bookItem && this.bookShelf) {
+        if (this.bookItem && this.shelfList) {
           const flatShelf = (function flatten (arr) {
             return [].concat(...arr.map(v => v.itemList ? [v, ...flatten(v.itemList)] : v))
-          })(this.bookShelf).filter(item => item.type === 1)
+          })(this.shelfList).filter(item => item.type === 1)
           const book = flatShelf.filter(item => item.fileName === this.bookItem.fileName)
           return book && book.length > 0
         } else {
@@ -154,6 +158,14 @@
     },
     methods: {
       addOrRemoveShelf () {
+        if (this.inBookShelf) {
+          this.setShelfList(deleteBookInShelf(this.bookItem)).then(() => {
+            setBookShelf(this.shelfList)
+          })
+        } else {
+          addBookToShelf(this.bookItem)
+          this.setShelfList(getBookShelf())
+        }
       },
       showToast (text) {
         this.toastText = text
@@ -285,6 +297,9 @@
     },
     mounted () {
       this.init()
+      if (!this.shelfList || this.shelfList.length === 0) {
+        this.getShelfList()
+      }
     }
   }
 </script>

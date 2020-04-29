@@ -200,7 +200,7 @@
                 toast.continueShow()
                 return new Promise((resolve, reject) => {
                     download(book, book => {
-                        console.log('下载成功')
+                        // console.log('下载成功')
                         toast.remove()
                         resolve(book)
                     }, reject, res => {

@@ -61,7 +61,7 @@
             return {
                 top: 100,
                 random: null,
-                banner: null,
+                banner: '',
                 guessYouLike: null,
                 recommend: null,
                 featured: null,

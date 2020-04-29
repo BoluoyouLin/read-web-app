@@ -1,3 +1,5 @@
+import { getBookShelf, setBookShelf } from './localStorage'
+
 export function addToShelf (list) {
     list.push({
         id: -1,
@@ -25,5 +27,24 @@ export function computedId (list) {
             }
         }
         return book
+    })
+}
+
+export function addBookToShelf (book) {
+    let shelfList = getBookShelf()
+    shelfList = removeToShelf(shelfList)
+    book.type = 1
+    shelfList.push(book)
+    shelfList = computedId(shelfList)
+    shelfList = addToShelf(shelfList)
+    setBookShelf(shelfList)
+}
+
+export function deleteBookInShelf (book) {
+    return getBookShelf().filter(item => {
+        if (item.itemList) {
+            item.itemList = item.itemList.filter(subItem => subItem.fileName !== book.fileName)
+        }
+        return item.fileName !== book.fileName
     })
 }

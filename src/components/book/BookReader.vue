@@ -213,7 +213,7 @@
                         contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/montserrat.css`),
                         contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/tangerine.css`)
                     ]).then(() => {
-                        console.log(('字体加载完成'))
+                        // console.log(('字体加载完成'))
                     })
                 })
                 this.book.ready.then(() => {
@@ -230,12 +230,12 @@
             const fileName = items[1]
             getLocalForage(fileName, (err, blob) => {
                 if (!err && blob) {
-                    console.log('找到离线缓存的电子书')
+                    // console.log('找到离线缓存的电子书')
                     this.setFileName(items.join('/')).then(() => {
                         this.initEpub(blob)
                     })
                 } else {
-                    console.log('在线获取电子书')
+                    // console.log('在线获取电子书')
                     this.setFileName(items.join('/'))
                         .then(() => {
                             const url = `${process.env.VUE_APP_RESOURCE_URL}/epub/${this.fileName}.epub`

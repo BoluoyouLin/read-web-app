@@ -269,22 +269,26 @@
           this.section = this.book.spine.get(this.chapter.href)
           this.rendition.display(this.section.href).then(section => {
             const currentPage = this.rendition.currentLocation()
-            const cfibase = section.cfiBase
-            const cfistart = currentPage.start.cfi.replace(/.*!/, '').replace(/\)/, '')
-            const cfiend = currentPage.end.cfi.replace(/.*!/, '').replace(/\)/, '')
-            this.currentSectionIndex = currentPage.start.displayed.page
-            this.currentSectionTotal = currentPage.start.displayed.total
-            const cfi = `epubcfi(${cfibase}!,${cfistart},${cfiend})`
-            // console.log(currentPage, cfi, cfibase, cfistart, cfiend)
-            this.book.getRange(cfi).then(range => {
-              let text = range.toLocaleString()
-              text = text.replace(/\s(2,)/g, '')
-              text = text.replace(/\r/g, '')
-              text = text.replace(/\n/g, '')
-              text = text.replace(/\t/g, '')
-              text = text.replace(/\f/g, '')
-              this.updateText(text)
-            })
+            if (!currentPage) {
+              const cfibase = section.cfiBase
+              const cfistart = currentPage.start.cfi.replace(/.*!/, '').replace(/\)/, '')
+              const cfiend = currentPage.end.cfi.replace(/.*!/, '').replace(/\)/, '')
+              this.currentSectionIndex = currentPage.start.displayed.page
+              this.currentSectionTotal = currentPage.start.displayed.total
+              const cfi = `epubcfi(${cfibase}!,${cfistart},${cfiend})`
+              // console.log(currentPage, cfi, cfibase, cfistart, cfiend)
+              this.book.getRange(cfi).then(range => {
+                let text = range.toLocaleString()
+                text = text.replace(/\s(2,)/g, '')
+                text = text.replace(/\r/g, '')
+                text = text.replace(/\n/g, '')
+                text = text.replace(/\t/g, '')
+                text = text.replace(/\f/g, '')
+                this.updateText(text)
+              })
+            } else {
+              this.updateText('语言材料获取失败')
+            }
           })
         }
       },

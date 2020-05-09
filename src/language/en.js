@@ -139,6 +139,23 @@ const messages = {
     haveRead2: 'already read',
     minutes: 'minutes',
     cancel: 'Cancel'
+  },
+  user: {
+    editUserInfo: 'Edit personal information',
+    clickLogin: 'Click to log in',
+    userCenter: 'Personal Center',
+    recentRead: 'Recent reading',
+    viewShelf: 'View bookshelf',
+    login: 'Login',
+    userName: 'User Name',
+    userNameTip: 'Please input a user name',
+    password: 'Password',
+    passwordTip: 'Please input a password',
+    register: 'register',
+    userImg: 'Head portrait',
+    introduce: 'Introduce yourself',
+    introduceTip: 'Talk about your career or hobbies',
+    confirm: 'confirm'
   }
 }
 

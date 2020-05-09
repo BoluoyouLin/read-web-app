@@ -139,6 +139,25 @@ const messages = {
     haveRead2: '已读',
     minutes: '分钟',
     cancel: '取消'
+  },
+  user: {
+    editUserInfo: '编辑个人信息',
+    clickLogin: '点击登陆',
+    userCenter: '个人中心',
+    recentRead: '最近阅读',
+    viewShelf: '查看书架',
+    login: '登录',
+    userName: '用户名',
+    userNameTip: '请输入用户名',
+    password: '密码',
+    passwordTip: '请输入密码',
+    register: '注册',
+    checkPassword: '校验密码',
+    checkPasswordTip: '请再次输入密码',
+    userImg: '头像',
+    introduce: '介绍自己',
+    introduceTip: '可以说说你的职业或爱好',
+    confirm: '确认'
   }
 }
 

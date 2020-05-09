@@ -76,6 +76,13 @@ const actions = {
     },
     setCurrentType: ({ commit }, type) => {
         return commit('SET_CURRENT_TYPE', type)
+    },
+    // user
+    setUserInfo: ({ commit }, newUserInfo) => {
+        return commit('SET_USER_INFO', newUserInfo)
+    },
+    setIsLogin: ({ commit }, newIsLogin) => {
+        return commit('SET_IS_LOGIN', newIsLogin)
     }
 }
 

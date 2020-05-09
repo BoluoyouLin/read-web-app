@@ -10,8 +10,6 @@
                      class="banner-img"
                 />
             </div>
-            <guess-you-like :data="guessYouLike"></guess-you-like>
-            <recommend :data="recommend"></recommend>
             <featured :data="featured"
                       :title-text="$t('home.featured')"
                       :btn-text="$t('home.seeAll')"
@@ -31,8 +29,6 @@
     import RandomRecommend from '../../components/home/RandomRecommend'
     import { bookMallHomeMixin } from '../../utils/mixin'
     import { home } from '../../api/store'
-    import GuessYouLike from '../../components/home/GuessYouLike'
-    import Recommend from '../../components/home/Recommend'
     import Featured from '../../components/home/Featured'
     import CategoryBook from '../../components/home/CategoryBook'
     import Category from '../../components/home/Category'
@@ -42,8 +38,6 @@
             Category,
             CategoryBook,
             Featured,
-            Recommend,
-            GuessYouLike,
             HomeTitle,
             Scroll,
             RandomRecommend
@@ -62,8 +56,6 @@
                 top: 100,
                 random: null,
                 banner: '',
-                guessYouLike: null,
-                recommend: null,
                 featured: null,
                 categoryList: null,
                 categories: null
@@ -77,8 +69,6 @@
                     const index = Math.floor(Math.random() * random.length)
                     this.random = random[index]
                     this.banner = res.data.banner
-                    this.guessYouLike = res.data.guessYouLike
-                    this.recommend = res.data.recommend
                     this.featured = res.data.featured
                     this.categoryList = res.data.categoryList
                     this.categories = res.data.categories

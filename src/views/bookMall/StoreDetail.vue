@@ -63,7 +63,6 @@
     </scroll>
     <div class="bottom-wrapper">
       <div class="bottom-btn" @click.stop.prevent="readBook()">{{$t('detail.read')}}</div>
-      <div class="bottom-btn" @click.stop.prevent="trialListening()">{{$t('detail.listen')}}</div>
       <div class="bottom-btn" @click.stop.prevent="addOrRemoveShelf()">
         <span class="icon-check" v-if="inBookShelf"></span>
         {{inBookShelf ? $t('detail.isAddedToShelf') : $t('detail.addOrRemoveShelf')}}
@@ -81,7 +80,6 @@
   import { detail } from '../../api/store'
   import { px2rem, realPx } from '../../utils/utils'
   import Epub from 'epubjs'
-  import { getLocalForage } from '../../utils/localForage'
   import { addBookToShelf, deleteBookInShelf } from '../../utils/shelf'
   import { getBookShelf, setBookShelf } from '../../utils/localStorage'
   import { shelfMixin } from '../../utils/mixin'
@@ -175,26 +173,6 @@
       readBook () {
         this.$router.push({
           path: `/book/${this.categoryText}|${this.fileName}`
-        })
-      },
-      trialListening () {
-        getLocalForage(this.fileName, (err, blob) => {
-          if (!err && blob && blob instanceof Blob) {
-            this.$router.push({
-              path: '/bookMall/speaking',
-              query: {
-                fileName: this.fileName
-              }
-            })
-          } else {
-            this.$router.push({
-              path: '/bookMall/speaking',
-              query: {
-                fileName: this.fileName,
-                opf: this.opf
-              }
-            })
-          }
         })
       },
       read (item) {

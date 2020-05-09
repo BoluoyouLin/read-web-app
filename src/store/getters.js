@@ -26,7 +26,11 @@ const book = {
     shelfSelected: state => state.shelf.shelfSelected,
     shelfTitleVisible: state => state.shelf.shelfTitleVisible,
     shelfDirectory: state => state.shelf.shelfDirectory,
-    currentType: state => state.shelf.currentType
+    currentType: state => state.shelf.currentType,
+    // user
+    userInfo: state => state.user.userInfo,
+    isLogin: state => state.user.isLogin,
+    noUserImg: state => state.user.noUserImg
 }
 
 export default book

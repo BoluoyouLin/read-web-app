@@ -34,10 +34,6 @@ const routes = [
       {
         path: 'detail',
         component: () => import('../views/bookMall/StoreDetail')
-      },
-      {
-        path: 'speaking',
-        component: () => import('../views/bookMall/StoreSpeaking')
       }
     ]
   },
@@ -48,6 +44,29 @@ const routes = [
   {
     path: '/directory',
     component: () => import('../views/shelf/Directory')
+  },
+  {
+    path: '/user',
+    component: () => import('../views/user/index.vue'),
+    redirect: '/user/userCenter',
+    children: [
+      {
+        path: 'userCenter',
+        component: () => import('../views/user/UserCenter')
+      },
+      {
+        path: 'login',
+        component: () => import('../views/user/Login')
+      },
+      {
+        path: 'register',
+        component: () => import('../views/user/Register')
+      },
+      {
+        path: 'editUserInfo',
+        component: () => import('../views/user/EditUserInfo')
+      }
+    ]
   }
 ]
 

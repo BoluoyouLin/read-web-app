@@ -213,3 +213,19 @@ export const shelfMixin = {
         }
     }
 }
+
+export const userMixin = {
+    computed: {
+        ...mapGetters([
+            'userInfo',
+            'isLogin',
+            'noUserImg'
+        ])
+    },
+    methods: {
+        ...mapActions([
+            'setUserInfo',
+            'setIsLogin'
+        ])
+    }
+}

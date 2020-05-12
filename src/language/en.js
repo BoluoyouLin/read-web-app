@@ -155,7 +155,8 @@ const messages = {
     userImg: 'Head portrait',
     introduce: 'Introduce yourself',
     introduceTip: 'Talk about your career or hobbies',
-    confirm: 'confirm'
+    confirm: 'confirm',
+    logout: 'logout'
   }
 }
 

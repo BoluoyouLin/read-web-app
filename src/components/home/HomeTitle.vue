@@ -13,6 +13,12 @@
                               @click="showFlipCard"
                         ></span>
                     </div>
+                    <div class="home-title-icon-wrapper"
+                         @click="goUserCenter"
+                    >
+                        <span class="icon-person icon"
+                        ></span>
+                    </div>
                 </div>
             </transition>
             <div class="home-title-icon-back-wrapper"
@@ -77,6 +83,9 @@
             }
         },
         methods: {
+            goUserCenter () {
+                this.$router.push('/user/userCenter')
+            },
             hideTitle () {
                 this.titleVisible = false
             },
@@ -146,10 +155,11 @@
         .home-title-wrapper {
             height: px2rem(45);
             display: flex;
-            padding: 0 px2rem(10);
+            padding: 0 px2rem(10) 0 px2rem(60);
             box-sizing: border-box;
             .home-title-icon-wrapper {
-                flex: 0 0 px2rem(20);
+                flex: 0 0 px2rem(25);
+                text-align: center;
             }
             .home-title-text-wrapper {
                 flex: 1;

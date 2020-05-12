@@ -5,14 +5,8 @@
           <span class="icon-back" @click="back"></span>
         </div>
         <div class="right">
-          <div class="icon-wrapper">
+          <div class="icon-wrapper" @click="goShelf">
             <span class="icon-shelf"></span>
-          </div>
-          <div class="icon-wrapper">
-            <span class="icon-cart"></span>
-          </div>
-          <div class="icon-wrapper">
-            <span class="icon-more"></span>
           </div>
         </div>
       </div>
@@ -26,6 +20,9 @@
     methods: {
       back () {
         this.$router.go(-1)
+      },
+      goShelf () {
+        this.$router.push('/shelf')
       }
     }
   }

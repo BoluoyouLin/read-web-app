@@ -19,7 +19,7 @@
             </div>
             <category :data="categories"></category>
         </Scroll>
-        <random-recommend :data="random"></random-recommend>
+        <random-recommend></random-recommend>
     </div>
 </template>
 
@@ -54,7 +54,6 @@
         data () {
             return {
                 top: 100,
-                random: null,
                 banner: '',
                 featured: null,
                 categoryList: null,
@@ -65,9 +64,6 @@
             home().then(res => {
                 if (res && res.status === 200) {
                     // console.log(res.data)
-                    const random = res.data.random
-                    const index = Math.floor(Math.random() * random.length)
-                    this.random = random[index]
                     this.banner = res.data.banner
                     this.featured = res.data.featured
                     this.categoryList = res.data.categoryList

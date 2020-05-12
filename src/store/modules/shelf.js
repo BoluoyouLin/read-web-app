@@ -5,7 +5,7 @@ const shelf = {
         shelfSelected: [], // 书架选中图书列表
         shelfTitleVisible: true, // 书架标题显示状态
         shelfDirectory: [],
-        currentType: 1
+        currentType: 1 // 1是主界面， 2是在文件夹里
     },
     mutations: {
         SET_IS_EDIT_MODE: (state, newIsEditMode) => {

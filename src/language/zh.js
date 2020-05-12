@@ -157,7 +157,8 @@ const messages = {
     userImg: '头像',
     introduce: '介绍自己',
     introduceTip: '可以说说你的职业或爱好',
-    confirm: '确认'
+    confirm: '确认',
+    logout: '退出登录'
   }
 }
 

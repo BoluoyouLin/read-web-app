@@ -1,7 +1,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { addCSS, removeAllCSS, themeList } from './book'
-import { getBookmark, getBookShelf, setBookLocation, setBookShelf } from './localStorage'
-import { shelf } from '../api/store'
+import { getBookmark, getCurrentUser, setBookLocation, setBookShelf } from './localStorage'
+import { shelf } from '../api/shelf'
 import { addToShelf, computedId, removeToShelf } from './shelf'
 
 export const bookMixin = {
@@ -151,6 +151,7 @@ export const shelfMixin = {
             'setShelfDirectory',
             'setCurrentType'
         ]),
+        // 展示图书详情
         showBookDetail (book) {
             this.$router.push({
                 path: '/bookMall/detail',
@@ -178,18 +179,26 @@ export const shelfMixin = {
                 this.setShelfDirectory(directoryList)
             })
         },
+        // 获取书架图书数据
         getShelfList () {
-            const shelfList = getBookShelf()
-            if (shelfList) {
-                return this.setShelfList(shelfList)
-            } else {
-                shelf().then(res => {
+            const currentUser = getCurrentUser()
+            if (currentUser) {
+                shelf(currentUser.id).then(res => {
                     if (res.status === 200 && res.data && res.data.bookList) {
                         const data = addToShelf(res.data.bookList)
-                        setBookShelf(data)
                         return this.setShelfList(data)
                     }
                 })
+            } else {
+                const toast = this.toast({
+                    text: '登录后即可查看书架图书'
+                })
+                toast.updateCurrentText('登录后即可查看书架图书')
+                this.$nextTick(() => {
+                    toast.show()
+                })
+                const data = addToShelf([])
+                return this.setShelfList(data)
             }
         },
         moveOutGroup (callback) {

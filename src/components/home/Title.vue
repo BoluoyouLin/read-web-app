@@ -1,7 +1,7 @@
 <template>
   <div class="home-title-wrapper">
     <div class="label">{{label}}</div>
-    <div class="btn" @click="click">{{btn}}</div>
+    <div class="btn" @click="click" v-show="showBtn">{{btn}}</div>
   </div>
 </template>
 
@@ -9,7 +9,11 @@
   export default {
     props: {
       label: String,
-      btn: String
+      btn: String,
+      showBtn: {
+        type: Boolean,
+        default: true
+      }
     },
     methods: {
       click () {

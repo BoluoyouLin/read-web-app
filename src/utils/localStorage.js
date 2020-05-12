@@ -88,3 +88,15 @@ export function setBookShelf (shelf) {
 export function getBookShelf () {
     return getLocalStorage('shelf')
 }
+
+export function getCurrentUser () {
+    return getLocalStorage('currentUser')
+}
+
+export function setCurrentUser (currentUser) {
+    return setLocalStorage('currentUser', currentUser)
+}
+
+export function deleteCurrentUser () {
+    return deleteLocalStorage('currentUser')
+}

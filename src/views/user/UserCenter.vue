@@ -25,12 +25,16 @@
                 </div>
             </div>
             <div class="recent-read-see-shelf" @click="goShelf">{{$t('user.viewShelf')}}</div>
+            <div class="logout-button-wrapper" v-show="isLogin">
+                <div class="logout-button" @click="logout">{{$t('user.logout')}}</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import { userMixin } from '../../utils/mixin'
+    import { deleteCurrentUser, getCurrentUser } from '../../utils/localStorage'
 
     export default {
         name: 'UserCenter',
@@ -76,7 +80,7 @@
         },
         methods: {
             back () {
-                this.$router.push('/shelf')
+                this.$router.push('/bookMall')
             },
             getRecentBook () {
             },
@@ -88,6 +92,22 @@
             },
             goEditUserInfo () {
                 this.$router.push('/user/editUserInfo')
+            },
+            logout () {
+                deleteCurrentUser()
+                this.setIsLogin(false)
+                this.setUserInfo({ userImg: this.noUserImg })
+            }
+        },
+        created () {
+            const currentUser = getCurrentUser()
+            if (currentUser) {
+                this.setUserInfo(currentUser)
+                this.setIsLogin(true)
+            } else {
+                this.userImg = this.noUserImg
+                this.setIsLogin(false)
+                this.setUserInfo({ userImg: this.noUserImg })
             }
         }
     }
@@ -153,7 +173,7 @@
                 line-height: px2rem(14);
                 color: #999999;
                 font-weight: bold;
-                border-bottom: px2rem(1) solid #dddddd;
+                border-bottom: px2rem(1) solid #f4f4f4;
                 width: 100%;
                 height: px2rem(40);
                 @include left;
@@ -163,7 +183,7 @@
                 width: 100%;
                 padding: px2rem(10);
                 box-sizing: border-box;
-                border-bottom: px2rem(1) solid #dddddd;
+                border-bottom: px2rem(1) solid #f4f4f4;
                 display: flex;
                 padding: px2rem(10) px2rem(5);
                 .recent-read-book {
@@ -187,6 +207,22 @@
                 @include center;
                 width: 100%;
                 height: px2rem(40);
+                border-bottom: px2rem(1) solid #f4f4f4;
+            }
+        }
+        .logout-button-wrapper {
+            margin-top: px2rem(10);
+            width: 100%;
+            padding: px2rem(10) px2rem(15);
+            box-sizing: border-box;
+            .logout-button {
+                width: 100%;
+                height: px2rem(40);
+                @include center;
+                background: orangered;
+                color: #fff;
+                font-size: px2rem(14);
+                border-radius: px2rem(10);
             }
         }
     }

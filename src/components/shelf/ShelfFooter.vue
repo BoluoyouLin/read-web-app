@@ -26,6 +26,7 @@
     import { setBookShelf, deleteLocalStorage } from '../../utils/localStorage'
     import { download } from '../../api/store'
     import { removeLocalForage } from '../../utils/localForage'
+    import { removeBookOfShelf, setBookCache, setBookPrivate } from '../../api/shelf'
 
     export default {
         mixins: [shelfMixin],
@@ -84,6 +85,7 @@
                 }
                 this.shelfSelected.forEach(item => {
                     item.private = isPrivate
+                    setBookPrivate(item.shelfId, isPrivate)
                 })
                 this.hidePopup()
                 this.setIsEditMode(false)
@@ -151,6 +153,7 @@
                 Promise.all(this.shelfSelected.map(book => this.removeBook(book))).then(books => {
                     books.map(book => {
                         book.cache = false
+                        setBookCache(book.shelfId, false)
                     })
                     setBookShelf(this.shelfList)
                     const toast = this.toast({
@@ -188,6 +191,7 @@
                 for (let i = 0; i < this.shelfSelected.length; i++) {
                     await this.downloadBook(this.shelfSelected[i]).then(book => {
                         book.cache = true
+                        setBookCache(book.shelfId, true)
                     })
                 }
             },
@@ -242,6 +246,9 @@
             removeShelfBook () {
                 this.shelfSelected.forEach(item => {
                     this.setShelfList(this.shelfList.filter(book => book !== item))
+                })
+                this.shelfSelected.forEach(item => {
+                    removeBookOfShelf(item.shelfId)
                 })
                 this.hidePopup()
                 this.setIsEditMode(false)

@@ -25,13 +25,6 @@ export function list () {
     })
 }
 
-export function shelf () {
-    return axios({
-        method: 'get',
-        url: `${process.env.VUE_APP_BASE_URL}/book/shelf`
-    })
-}
-
 export function download (book, successCallback, errorCallback, progressCallback) {
     if (!progressCallback) {
         progressCallback = errorCallback
@@ -61,5 +54,13 @@ export function flatList () {
     return axios({
         method: 'get',
         url: `${process.env.VUE_APP_ONLINE_URL}/book/flat-list`
+    })
+}
+
+// 获取随机推荐图书
+export function getRandomBook () {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_ONLINE_URL}/book/random`
     })
 }

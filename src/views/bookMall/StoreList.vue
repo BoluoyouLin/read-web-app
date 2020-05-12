@@ -52,6 +52,7 @@
       }
     },
     methods: {
+      // 获取分类语言文本
       getCategoryText (key) {
         return `${categoryText(categoryList[key], this)}(${this.list[key].length})`
       },
@@ -65,21 +66,34 @@
           this.$refs.title.hideShadow()
         }
       },
+      // 获取数据
       getList () {
         list().then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
-          const category = this.$route.query.category
-          const keyword = this.$route.query.keyword
-          if (category) {
-            const key = Object.keys(this.list).filter(item => item === category)[0]
-            const data = this.list[key]
-            this.list = {}
-            this.list[key] = data
-          } else if (keyword) {
-            Object.keys(this.list).filter(key => {
-              this.list[key] = this.list[key].filter(book => book.fileName.indexOf(keyword) >= 0)
-              return this.list[key].length > 0
+          if (response.data.error_code === 0) {
+            this.list = response.data.data
+            this.total = response.data.total
+            const category = this.$route.query.category
+            const keyword = this.$route.query.keyword
+            // 分类列表
+            if (category) {
+              const key = Object.keys(this.list).filter(item => item === category)[0]
+              const data = this.list[key]
+              this.list = {}
+              this.list[key] = data
+            } else if (keyword) {
+              // 搜素列表
+              Object.keys(this.list).filter(key => {
+                this.list[key] = this.list[key].filter(book => book.fileName.indexOf(keyword) >= 0)
+                return this.list[key].length > 0
+              })
+            }
+          } else {
+            const toast = this.toast({
+              text: response.data.msg
+            })
+            toast.updateCurrentText(response.data.msg)
+            this.$nextTick(() => {
+              toast.show()
             })
           }
         })

@@ -1,4 +1,5 @@
-import { getBookShelf, setBookShelf } from './localStorage'
+import { getBookShelf, getCurrentUser } from './localStorage'
+import { addBookToShelfInDataBase } from '../api/shelf'
 
 export function addToShelf (list) {
     list.push({
@@ -30,14 +31,17 @@ export function computedId (list) {
     })
 }
 
+// 添加图书到书架
 export function addBookToShelf (book) {
-    let shelfList = getBookShelf()
-    shelfList = removeToShelf(shelfList)
-    book.type = 1
-    shelfList.push(book)
-    shelfList = computedId(shelfList)
-    shelfList = addToShelf(shelfList)
-    setBookShelf(shelfList)
+    const userId = getCurrentUser().id
+    addBookToShelfInDataBase(book.id, userId)
+    // let shelfList = getBookShelf()
+    // shelfList = removeToShelf(shelfList)
+    // book.type = 1
+    // shelfList.push(book)
+    // shelfList = computedId(shelfList)
+    // shelfList = addToShelf(shelfList)
+    // setBookShelf(shelfList)
 }
 
 export function deleteBookInShelf (book) {

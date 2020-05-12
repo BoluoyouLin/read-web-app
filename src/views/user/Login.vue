@@ -32,6 +32,7 @@
 <script>
     import { login } from '../../api/user'
     import { userMixin } from '../../utils/mixin'
+    import { setCurrentUser } from '../../utils/localStorage'
 
     export default {
         name: 'Login',
@@ -71,6 +72,7 @@
                             this.$nextTick(() => {
                                 toast.show()
                                 this.setUserInfo(data.data)
+                                setCurrentUser(data.data)
                                 this.setIsLogin(true)
                                 setTimeout(() => {
                                     this.$router.push('/user/userCenter')

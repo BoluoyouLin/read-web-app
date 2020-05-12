@@ -53,12 +53,10 @@
 <script>
     import { bookMallHomeMixin } from '../../utils/mixin'
     import { flipCardList } from '../../utils/bookMall'
+    import { getRandomBook } from '../../api/store'
 
     export default {
         mixins: [bookMallHomeMixin],
-        props: {
-            data: Object
-        },
         data () {
             return {
                 flipCardList,
@@ -68,13 +66,15 @@
                 smallBallList: null,
                 smallBallListLength: 18,
                 runSmallBallAnimation: false,
-                bookCardAnimation: false
+                bookCardAnimation: false,
+                data: {}
             }
         },
         watch: {
             flipCardVisible (value) {
                 if (value) {
                     this.flipCardAnimation = true
+                    this.getRandomBook()
                     setTimeout(() => {
                         this.createFlipCardAnimation()
                         this.startSmallBallAnimation()
@@ -83,14 +83,35 @@
             }
         },
         methods: {
+            // 获取数据
+            getRandomBook () {
+                getRandomBook().then(res => {
+                    const data = res.data
+                    if (data.error_code === 0) {
+                        this.data = data.random[0]
+                        this.$nextTick(() => {
+                            this.stopFlipCardAnimation()
+                            this.startBookCardAnimation()
+                        })
+                    } else {
+                        const toast = this.toast({
+                            text: data.msg
+                        })
+                        toast.updateCurrentText(data.msg)
+                        this.$nextTick(() => {
+                            toast.show()
+                        })
+                    }
+                })
+            },
             // 隐藏翻转卡片
             hideFlipCard () {
                 this.setFlipCardVisible(false)
                 this.stopFlipCardAnimation()
                 this.closeBookCardAnimation()
-                if (this.task2) {
-                    clearTimeout(this.task2)
-                }
+                // if (this.task2) {
+                //     clearTimeout(this.task2)
+                // }
             },
             // 绑定半圆样式
             circleStyle (item, simple) {
@@ -142,10 +163,10 @@
                 this.task = setInterval(() => {
                     this.flipCardRotate()
                 }, 30)
-                this.task2 = setTimeout(() => {
-                    this.stopFlipCardAnimation()
-                    this.startBookCardAnimation()
-                }, 2500)
+                // this.task2 = setTimeout(() => {
+                //     this.stopFlipCardAnimation()
+                //     this.startBookCardAnimation()
+                // }, 2500)
             },
             // 下一次动画
             nextFlipCardAnimation () {

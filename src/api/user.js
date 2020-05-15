@@ -41,3 +41,65 @@ export function editUserInfo (data) {
         }
     })
 }
+
+export function addUserReadRecord (userId, bookId) {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_BASE_URL}/user/addReadRecord`,
+        params: {
+            userId,
+            bookId
+        }
+    })
+}
+
+export function getUserReadRecords (userId) {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_BASE_URL}/user/getUserReadRecords`,
+        params: {
+            userId
+        }
+    })
+}
+
+export function deleteUserReadRecord (recordId) {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_BASE_URL}/user/deleteUserReadRecord`,
+        params: {
+            recordId
+        }
+    })
+}
+
+export function getUserSearchHistory (userId) {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_BASE_URL}/user/getUserSearchHistory`,
+        params: {
+            userId
+        }
+    })
+}
+
+export function addUserSearchHistory (userId, text) {
+    return axios({
+        method: 'post',
+        url: `${process.env.VUE_APP_BASE_URL}/user/addUserSearchHistory`,
+        data: {
+            userId,
+            text
+        }
+    })
+}
+
+export function clearUserSearchHistory (userId) {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_BASE_URL}/user/clearUserSearchHistory`,
+        params: {
+            userId
+        }
+    })
+}

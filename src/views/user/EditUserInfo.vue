@@ -47,10 +47,12 @@
             return {
                 userName: '',
                 userImg: '',
+                baseUserImg: '',
                 introduce: ''
             }
         },
         methods: {
+            // 编辑用户信息
             editUserInfo () {
                 if (this.userName.length === 0 || this.userName === null) {
                     const toast = this.toast({
@@ -64,7 +66,7 @@
                     const userInfo = {
                         id: this.userInfo.id,
                         userName: this.userName,
-                        userImg: this.userImg,
+                        userImg: this.baseUserImg,
                         introduce: this.introduce
                     }
                     editUserInfo(userInfo).then(res => {
@@ -94,7 +96,8 @@
                     saveUserImg(reader.result).then(res => {
                         const data = res.data
                         if (data.error_code === 0) {
-                            _this.userImg = data.data
+                            _this.userImg = `${process.env.VUE_APP_RESOURCE_URL}${data.data}`
+                            _this.baseUserImg = `${data.data}`
                         }
                         const toast = _this.toast({
                             text: data.msg

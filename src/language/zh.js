@@ -17,7 +17,8 @@ const messages = {
     category: '分类',
     books: '本书',
     readNow: '立即阅读',
-    allBook: '共 $1 本图书'
+    allBook: '共 $1 本图书',
+    noSearchHistory: '暂无搜索历史'
   },
   category: {
     computerScience: '计算机科学',
@@ -112,15 +113,6 @@ const messages = {
     addOrRemoveShelf: '加入书架',
     isAddedToShelf: '已加入书架'
   },
-  speak: {
-    voice: '语音朗读',
-    read: '查看原文',
-    settings: '设置',
-    timing: '定时',
-    current: '当前章节',
-    requestFailed: '请求失败!',
-    apply: '语义解析核心技术由科大讯飞提供'
-  },
   book: {
     pulldownAddMark: '下拉添加书签',
     releaseAddMark: '松手添加书签',
@@ -158,7 +150,8 @@ const messages = {
     introduce: '介绍自己',
     introduceTip: '可以说说你的职业或爱好',
     confirm: '确认',
-    logout: '退出登录'
+    logout: '退出登录',
+    noRecentBooks: '暂无最近阅读记录'
   }
 }
 

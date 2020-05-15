@@ -39,7 +39,7 @@
     import BookDialog from '../common/Dialog'
     import { shelfMixin } from '../../utils/mixin'
     import { getCurrentUser } from '../../utils/localStorage'
-    import { addNewDirectory, moveBookToDirectory } from '../../api/shelf'
+    import { addNewDirectory, changeDirectoryTitle, moveBookToDirectory } from '../../api/shelf'
 
     export default {
         name: 'shelf-group-dialog',
@@ -71,7 +71,10 @@
                 ]
             },
             category () {
-                return this.shelfList.filter(item => item.type === 2)
+                if (this.shelfList) {
+                    return this.shelfList.filter(item => item.type === 2)
+                }
+                return []
             },
             categoryList () {
                 const list = [...this.defaultCategory, ...this.category]
@@ -105,7 +108,7 @@
                 } else if (item.edit && item.edit === 2) {
                     this.moveOutFromGroup(item)
                 } else {
-                    this.moveToGroup(item)
+                    this.moveToGroup(item.id, item.title)
                 }
             },
             clear () {
@@ -114,7 +117,7 @@
             // 将图书移入指定文件夹
             moveToGroup (directoryId, title) {
                 const promiseList = []
-                this.selected.forEach(book => {
+                this.shelfSelected.forEach(book => {
                     promiseList.push(moveBookToDirectory(directoryId, book.shelfId))
                 })
                 Promise.all(promiseList).then(() => {
@@ -144,6 +147,7 @@
                 //         this.onComplete()
                 //     })
             },
+            // 将图书移出文件夹
             moveOutFromGroup () {
                 this.moveOutGroup(this.onComplete)
             },
@@ -153,7 +157,9 @@
                     return
                 }
                 if (this.showNewGroup) {
+                    // 修改文件夹名
                     this.shelfDirectory.title = this.newGroupName
+                    changeDirectoryTitle(this.newGroupName, this.shelfDirectory.id)
                     this.onComplete()
                 } else {
                     // 新建文件夹
@@ -161,7 +167,7 @@
                     addNewDirectory(this.newGroupName, userId).then(res => {
                         const data = res.data
                         if (data.error_code === 0) {
-                            this.moveToGroup(data.data.directoryId, this.newGroupName)
+                            this.moveToGroup(data.data.insertId, this.newGroupName)
                         }
                     })
                     // const group = {

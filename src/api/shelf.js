@@ -72,7 +72,7 @@ export function setBookCache (shelfId, cache) {
 export function addBookToShelfInDataBase (bookId, userId) {
     return axios({
         method: 'post',
-        url: `${process.env.VUE_APP_BASE_URL}/shelf/setBookCache`,
+        url: `${process.env.VUE_APP_BASE_URL}/shelf/addBookToShelf`,
         data: {
             bookId,
             userId
@@ -110,6 +110,70 @@ export function moveBookToDirectory (directoryId, shelfId) {
         data: {
             directoryId,
             shelfId
+        }
+    })
+}
+
+/**
+ * 获取图书书架id
+ * @param bookId
+ * @param userId
+ * @returns {AxiosPromise}
+ */
+export function getBookShelfId (bookId, userId) {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_BASE_URL}/shelf/getShelfId`,
+        params: {
+            bookId,
+            userId
+        }
+    })
+}
+
+/**
+ * 将图书移出书架
+ * @param shelfId
+ * @returns {AxiosPromise}
+ */
+export function moveOutBookInDirectory (shelfId) {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_BASE_URL}/shelf/moveOutBookInDirectory`,
+        params: {
+            shelfId
+        }
+    })
+}
+
+/**
+ * 修改文件夹标题
+ * @param title
+ * @param directoryId
+ * @returns {AxiosPromise}
+ */
+export function changeDirectoryTitle (title, directoryId) {
+    return axios({
+        method: 'post',
+        url: `${process.env.VUE_APP_BASE_URL}/shelf/changeDirectoryTitle`,
+        data: {
+            title,
+            directoryId
+        }
+    })
+}
+
+/**
+ * 删除文件夹
+ * @param directoryId
+ * @returns {AxiosPromise}
+ */
+export function deleteDirectory (directoryId) {
+    return axios({
+        method: 'get',
+        url: `${process.env.VUE_APP_BASE_URL}/shelf/deleteDirectory`,
+        params: {
+            directoryId
         }
     })
 }

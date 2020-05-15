@@ -242,18 +242,29 @@
                     ]
                 }).show()
             },
-            // 移出书架
+            // 将图书移出书架
             removeShelfBook () {
                 this.shelfSelected.forEach(item => {
-                    this.setShelfList(this.shelfList.filter(book => book !== item))
+                   removeBookOfShelf(item.shelfId)
                 })
-                this.shelfSelected.forEach(item => {
-                    removeBookOfShelf(item.shelfId)
-                })
+                let newShelf = []
+                for (let i = 0; i < this.shelfSelected.length; i++) {
+                    newShelf = this.shelfList.filter(item => {
+                        if (item.itemList) {
+                            item.itemList = item.itemList.filter(subItem => subItem.id !== this.shelfSelected[i].id)
+                            return true
+                        } else {
+                            return item.id !== this.shelfSelected[i].id
+                        }
+                    })
+                }
+                this.setShelfList(newShelf)
+                if (this.currentType === 2) {
+                    this.getDirectoryList(this.shelfDirectory.title)
+                }
                 this.hidePopup()
                 this.setIsEditMode(false)
                 this.clearShelfSelected()
-                setBookShelf(this.shelfList)
             },
             // 点击底部栏
             clickTab (item) {

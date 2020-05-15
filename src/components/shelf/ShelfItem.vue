@@ -40,6 +40,7 @@
             }
         },
         methods: {
+            // 点击书架项目
             clickItem () {
                 if (this.isEditMode && this.data.type === 1) {
                     this.data.selected = !this.data.selected

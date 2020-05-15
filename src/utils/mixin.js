@@ -1,8 +1,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import { addCSS, removeAllCSS, themeList } from './book'
-import { getBookmark, getCurrentUser, setBookLocation, setBookShelf } from './localStorage'
-import { shelf } from '../api/shelf'
-import { addToShelf, computedId, removeToShelf } from './shelf'
+import { getBookmark, getCurrentUser, setBookLocation } from './localStorage'
+import { moveOutBookInDirectory, shelf } from '../api/shelf'
+import { addToShelf, removeToShelf } from './shelf'
 
 export const bookMixin = {
     computed: {
@@ -163,21 +163,21 @@ export const shelfMixin = {
         },
         clearShelfSelected () {
             this.setShelfSelected([])
-            this.shelfList.forEach(item => {
-                item.selected = false
-                if (item.itemList) {
-                    item.itemList.forEach(item => {
-                        item.selected = false
-                    })
-                }
-            })
-            setBookShelf(this.shelfList)
+            if (this.shelfList) {
+                this.shelfList.forEach(item => {
+                    item.selected = false
+                    if (item.itemList) {
+                        item.itemList.forEach(item => {
+                            item.selected = false
+                        })
+                    }
+                })
+            }
         },
+        // 获取文件夹图书列表
         getDirectoryList (title) {
-            this.getShelfList().then(() => {
-                const directoryList = this.shelfList.filter(item => item.type === 2 && item.title === title)[0]
-                this.setShelfDirectory(directoryList)
-            })
+            const directoryList = this.shelfList.filter(item => item.type === 2 && item.title === title)[0]
+            this.setShelfDirectory(directoryList)
         },
         // 获取书架图书数据
         getShelfList () {
@@ -201,6 +201,7 @@ export const shelfMixin = {
                 return this.setShelfList(data)
             }
         },
+        // 将图书移出分组
         moveOutGroup (callback) {
             this.setShelfList(this.shelfList.map(book => {
                 if (book.type === 2 && book.itemList) {
@@ -208,10 +209,12 @@ export const shelfMixin = {
                 }
                 return book
             })).then(() => {
+                this.shelfSelected.forEach(item => {
+                    moveOutBookInDirectory(item.shelfId)
+                })
                 let list = removeToShelf(this.shelfList)
                 list = [].concat(list, ...this.shelfSelected)
                 list = addToShelf(list)
-                list = computedId(list)
                 this.setShelfList(list).then(() => {
                     this.toast({
                         text: this.$t('shelf.moveBookOutSuccess')
@@ -228,13 +231,15 @@ export const userMixin = {
         ...mapGetters([
             'userInfo',
             'isLogin',
-            'noUserImg'
+            'noUserImg',
+            'recentBooks'
         ])
     },
     methods: {
         ...mapActions([
             'setUserInfo',
-            'setIsLogin'
+            'setIsLogin',
+            'setRecentBooks'
         ])
     }
 }

@@ -43,18 +43,20 @@
                 </div>
             </div>
         </div>
-        <hot-search-list v-show="hotSearchListVisible" ref="hotSearch"></hot-search-list>
+        <search-list v-show="hotSearchListVisible" ref="searchList"></search-list>
     </div>
 </template>
 
 <script>
     import { bookMallHomeMixin } from '../../utils/mixin'
-    import HotSearchList from './HotSearchList'
+    import SearchList from './SearchList'
+    import { getCurrentUser } from '../../utils/localStorage'
+    import { addUserSearchHistory } from '../../api/user'
 
     export default {
         mixins: [bookMallHomeMixin],
         components: {
-            HotSearchList
+            SearchList
         },
         data () {
             return {
@@ -113,7 +115,7 @@
                 this.hideShadow()
                 this.hotSearchListVisible = true
                 this.$nextTick(() => {
-                    this.$refs.hotSearch.reset()
+                    this.$refs.searchList.reset()
                 })
             },
             back () {
@@ -127,7 +129,14 @@
             showFlipCard () {
                 this.setFlipCardVisible(true)
             },
+            addUserSearchHistory () {
+                const currentUser = getCurrentUser()
+                if (currentUser) {
+                    addUserSearchHistory(currentUser.id, this.searchText)
+                }
+            },
             search () {
+                this.addUserSearchHistory()
                 this.$router.push({
                     path: '/bookMall/list',
                     query: {

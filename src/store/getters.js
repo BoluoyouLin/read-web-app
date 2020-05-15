@@ -30,7 +30,8 @@ const book = {
     // user
     userInfo: state => state.user.userInfo,
     isLogin: state => state.user.isLogin,
-    noUserImg: state => state.user.noUserImg
+    noUserImg: state => state.user.noUserImg,
+    recentBooks: state => state.user.recentBooks
 }
 
 export default book

@@ -16,15 +16,14 @@
     import { bookMixin } from '../../utils/mixin'
     import Epub from 'epubjs'
     import {
-        getTheme,
         getFontFamily,
         getFontSize,
-        setTheme,
         setFontFamily,
-        setFontSize, getBookLocation
+        setFontSize, getBookLocation, getCurrentUser
     } from '../../utils/localStorage'
     import { flatten } from '../../utils/book'
     import { getLocalForage } from '../../utils/localForage'
+    import { addTheme, getUserTheme } from '../../api/reader'
     global.ePub = Epub
     export default {
         mixins: [bookMixin],
@@ -141,19 +140,42 @@
                     setFontSize(this.fileName, this.defaultFontSize)
                 }
             },
+            // 从数据库获取用户主题
+            getUserThemeInDatabase (userId) {
+                getUserTheme(userId).then(res => {
+                    if (res.data && res.data.error_code === 0) {
+                        return res.data.data
+                    } else {
+                        return null
+                    }
+                })
+            },
             // 初始化主题
-            initTheme () {
-                let theme = getTheme()
-                if (!theme) {
-                    theme = this.themeList[0].name
-                    setTheme(theme)
-                }
+            async initTheme () {
                 this.themeList.forEach(item => {
                     this.currentBook.rendition.themes.register(item.name, item.style)
                 })
-                this.setDefaultTheme(theme)
-                this.changeTheme(theme)
-                this.currentBook.rendition.themes.select(theme)
+                let theme
+                const currentUser = getCurrentUser()
+                if (currentUser) {
+                    getUserTheme(currentUser.id).then(res => {
+                        if (res.data && res.data.error_code === 0) {
+                            theme = res.data.data
+                            if (!theme) {
+                                theme = this.themeList[0].name
+                                addTheme(currentUser.id, theme)
+                            }
+                            this.setDefaultTheme(theme)
+                            this.changeTheme(theme)
+                            this.currentBook.rendition.themes.select(theme)
+                        }
+                    })
+                } else {
+                    theme = this.themeList[0].name
+                    this.setDefaultTheme(theme)
+                    this.changeTheme(theme)
+                    this.currentBook.rendition.themes.select(theme)
+                }
             },
             // 初始化字体类型
             initFontFamily () {

@@ -1,5 +1,5 @@
-import { getBookShelf, getCurrentUser } from './localStorage'
-import { addBookToShelfInDataBase } from '../api/shelf'
+import { getCurrentUser } from './localStorage'
+import { addBookToShelfInDataBase, getBookShelfId, removeBookOfShelf } from '../api/shelf'
 
 export function addToShelf (list) {
     list.push({
@@ -32,23 +32,29 @@ export function computedId (list) {
 }
 
 // 添加图书到书架
-export function addBookToShelf (book) {
+export function addBookToShelf (book, vue) {
     const userId = getCurrentUser().id
-    addBookToShelfInDataBase(book.id, userId)
-    // let shelfList = getBookShelf()
-    // shelfList = removeToShelf(shelfList)
-    // book.type = 1
-    // shelfList.push(book)
-    // shelfList = computedId(shelfList)
-    // shelfList = addToShelf(shelfList)
-    // setBookShelf(shelfList)
+    addBookToShelfInDataBase(book.id, userId).then(() => {
+        vue.setShelfList(vue.getShelfList())
+    })
 }
 
-export function deleteBookInShelf (book) {
-    return getBookShelf().filter(item => {
-        if (item.itemList) {
-            item.itemList = item.itemList.filter(subItem => subItem.fileName !== book.fileName)
+// 将图书移除书架
+export function deleteBookInShelf (book, vue) {
+    const userId = getCurrentUser().id
+    getBookShelfId(book.id, userId).then(res => {
+        if (res.data.error_code === 0) {
+            removeBookOfShelf(res.data.data[0].id).then(() => {
+                return vue.getShelfList()
+            })
+        } else {
+            const toast = vue.toast({
+                text: res.data.msg
+            })
+            toast.updateCurrentText(res.data.msg)
+            vue.$nextTick(() => {
+                toast.show()
+            })
         }
-        return item.fileName !== book.fileName
     })
 }

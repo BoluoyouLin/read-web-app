@@ -26,7 +26,8 @@
 <script>
     import { shelfMixin } from '../../utils/mixin'
     import { clearLocalForage } from '../../utils/localForage'
-    import { clearLocalStorage, setBookShelf } from '../../utils/localStorage'
+    import { clearLocalStorage } from '../../utils/localStorage'
+    import { deleteDirectory } from '../../api/shelf'
 
     export default {
         mixins: [shelfMixin],
@@ -101,6 +102,7 @@
                 })
                 this.popupMenu.show()
             },
+            // 展示修改文件夹名字弹窗
             changeGroupName () {
                 this.hidePopup()
                 this.dialog({
@@ -108,6 +110,7 @@
                     groupName: this.shelfDirectory.title
                 }).show()
             },
+            // 展示删除文件夹弹窗
             showDeleteGroup () {
                 this.hidePopup()
                 setTimeout(() => {
@@ -122,6 +125,7 @@
                     }).show()
                 }, 200)
             },
+            // 删除文件夹
             deleteGroup () {
                 if (!this.isEmpty) {
                     this.setShelfSelected(this.shelfDirectory.itemList)
@@ -132,9 +136,10 @@
             },
             onComplete () {
                 this.hidePopup()
+                // 删除数据库中的文件夹
+                deleteDirectory(this.shelfDirectory.id)
                 this.setShelfList(this.shelfList.filter(item => item.id !== this.shelfDirectory.id))
                 .then(() => {
-                    setBookShelf(this.shelfList)
                     this.$router.go(-1)
                     this.setIsEditMode(false)
                 })

@@ -71,8 +71,10 @@
                             toast.updateCurrentText(data.msg)
                             this.$nextTick(() => {
                                 toast.show()
-                                this.setUserInfo(data.data)
-                                setCurrentUser(data.data)
+                                const user = data.data
+                                user.userImg = `${process.env.VUE_APP_RESOURCE_URL}${user.userImg}`
+                                this.setUserInfo(user)
+                                setCurrentUser(user)
                                 this.setIsLogin(true)
                                 setTimeout(() => {
                                     this.$router.push('/user/userCenter')

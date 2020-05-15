@@ -16,7 +16,8 @@
 
 <script>
     import { bookMixin } from '../../utils/mixin'
-    import { setTheme } from '../../utils/localStorage'
+    import { getCurrentUser, setTheme } from '../../utils/localStorage'
+    import { changeTheme } from '../../api/reader'
 
     export default {
         mixins: [bookMixin],
@@ -26,6 +27,10 @@
                 this.setDefaultTheme(theme.name).then(() => {
                     this.currentBook.rendition.themes.select(theme.name)
                     this.changeTheme(theme.name)
+                    const currentUser = getCurrentUser()
+                    if (currentUser) {
+                        changeTheme(currentUser.id, theme.name)
+                    }
                 })
                 setTheme(theme.name)
             }

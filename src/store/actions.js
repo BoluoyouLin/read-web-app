@@ -83,6 +83,9 @@ const actions = {
     },
     setIsLogin: ({ commit }, newIsLogin) => {
         return commit('SET_IS_LOGIN', newIsLogin)
+    },
+    setRecentBooks: ({ commit }, newRecentBooks) => {
+        return commit('SET_RECENT_BOOKS', newRecentBooks)
     }
 }
 

@@ -17,7 +17,8 @@ const messages = {
     category: 'Category',
     books: 'books',
     readNow: 'Read Now',
-    allBook: '$1 books'
+    allBook: '$1 books',
+    noSearchHistory: 'No search history'
   },
   category: {
     computerScience: 'Computer Science',
@@ -112,15 +113,6 @@ const messages = {
     addOrRemoveShelf: 'Add to Book Shelf',
     isAddedToShelf: 'Added to BookShelf'
   },
-  speak: {
-    voice: 'Voice Reading',
-    read: 'Read Originial',
-    settings: 'Settings',
-    timing: 'Timing',
-    current: 'Current Section',
-    requestFailed: 'Request failed!',
-    apply: 'The core technology of semantic analysis is provided by iFLY TEK'
-  },
   book: {
     pulldownAddMark: 'Pull down to add bookmark',
     releaseAddMark: 'Release to add bookmark',
@@ -156,7 +148,8 @@ const messages = {
     introduce: 'Introduce yourself',
     introduceTip: 'Talk about your career or hobbies',
     confirm: 'confirm',
-    logout: 'logout'
+    logout: 'logout',
+    noRecentBooks: 'No recent reading record'
   }
 }
 

@@ -16,14 +16,15 @@
         </div>
         <div class="recent-read">
             <div class="recent-read-title">{{$t('user.recentRead')}}</div>
-            <div class="recent-read-books">
-                <div class="recent-read-book" v-for="book in recentBooks" :key="book.id">
+            <div class="recent-read-books" v-if="this.recentBooks.length > 0">
+                <div class="recent-read-book" v-for="book in recentBooks" :key="book.id" @click="goBookDetail(book)">
                     <img :src="book.cover"
                          class="book-cover"
                     />
                     <div class="book-title">{{book.title}}</div>
                 </div>
             </div>
+            <no-data v-else :text="$t('user.noRecentBooks')"></no-data>
             <div class="recent-read-see-shelf" @click="goShelf">{{$t('user.viewShelf')}}</div>
             <div class="logout-button-wrapper" v-show="isLogin">
                 <div class="logout-button" @click="logout">{{$t('user.logout')}}</div>
@@ -35,54 +36,41 @@
 <script>
     import { userMixin } from '../../utils/mixin'
     import { deleteCurrentUser, getCurrentUser } from '../../utils/localStorage'
+    import { getUserReadRecords } from '../../api/user'
+    import NoData from '../../components/common/NoData'
 
     export default {
         name: 'UserCenter',
         mixins: [userMixin],
-        data () {
-            return {
-                recentBooks: [{
-                    id: 1,
-                    fileName: '2014_Book_TheInfoSecHandbook',
-                    cover: process.env.VUE_APP_RESOURCE_URL + '/img//ComputerScience/2014_Book_TheInfoSecHandbook.jpeg',
-                    title: 'The InfoSec Handbook',
-                    author: 'Umesh Hodeghatta Rao and Umesha Nayak',
-                    publisher: 'Apress, Berkeley, CA',
-                    bookId: '2014_Book_TheInfoSecHandbook',
-                    category: 1,
-                    categoryText: 'ComputerScience',
-                    language: 'en',
-                    rootFile: 'OEBPS/content.opf',
-                    selected: false,
-                    private: true,
-                    cache: true,
-                    haveRead: 0,
-                    type: 1
-                }, {
-                    id: 2,
-                    fileName: '2018_Book_SolarParticleRadiationStormsFo',
-                    cover: process.env.VUE_APP_RESOURCE_URL + '/img//Physics/978-3-319-60051-2_CoverFigure.jpg',
-                    title: 'Solar Particle Radiation Storms Forecasting and Analysis',
-                    author: 'Olga E. Malandraki',
-                    publisher: 'Springer International Publishing',
-                    bookId: '2018_Book_SolarParticleRadiationStormsFo',
-                    category: 19,
-                    categoryText: 'Physics',
-                    language: 'en',
-                    rootFile: 'OEBPS/package.opf',
-                    selected: false,
-                    private: false,
-                    cache: false,
-                    haveRead: 0,
-                    type: 1
-                }]
-            }
+        components: {
+            NoData
         },
         methods: {
+            // 查看图书详情
+            goBookDetail (book) {
+                this.$router.push({
+                    path: '/bookMall/detail',
+                    query: {
+                        fileName: book.fileName,
+                        categoryText: book.categoryText
+                    }
+                })
+            },
             back () {
                 this.$router.push('/bookMall')
             },
+            // 获取用户最近阅读记录
             getRecentBook () {
+                const currentUser = getCurrentUser()
+                if (currentUser) {
+                    const userId = currentUser.id
+                    getUserReadRecords(userId).then(res => {
+                        const data = res.data
+                        if (data.error_code === 0) {
+                            this.setRecentBooks(data.data)
+                        }
+                    })
+                }
             },
             goShelf () {
                 this.$router.push('/shelf')
@@ -109,6 +97,7 @@
                 this.setIsLogin(false)
                 this.setUserInfo({ userImg: this.noUserImg })
             }
+            this.getRecentBook()
         }
     }
 </script>

@@ -1,5 +1,6 @@
 const book = {
     state: {
+        bookId: 0,
         fileName: '',
         menuVisible: false,
         settingVisible: -1, // -1:不显示，0：显示字号，1：显示主题， 2：显示进度， 3：显示目录
@@ -19,6 +20,9 @@ const book = {
         isBookmark: null // 当前页是否为书签页
       },
       mutations: {
+        SET_BOOK_ID: (state, newBookId) => {
+            state.bookId = newBookId
+        },
         SET_FILE_NAME: (state, newFileName) => {
           state.fileName = newFileName
         },

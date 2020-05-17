@@ -165,12 +165,12 @@
                     addUserReadRecord(user.id, this.bookItem.id)
                 }
                 this.$router.push({
-                    path: `/book/${this.categoryText}|${this.fileName}`
+                    path: `/book/${this.categoryText}|${this.fileName}|${this.bookItem.id}`
                 })
             },
             read (item) {
                 this.$router.push({
-                    path: `/book/${this.categoryText}|${this.fileName}`
+                    path: `/book/${this.categoryText}|${this.fileName}|${this.bookItem.id}`
                 })
             },
             itemStyle (item) {

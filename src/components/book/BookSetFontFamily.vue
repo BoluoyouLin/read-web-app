@@ -24,7 +24,8 @@
 <script>
     import { bookMixin } from '../../utils/mixin'
     import { FONT_FAMILY } from '../../utils/book'
-    import { setFontFamily } from '../../utils/localStorage'
+    import { getCurrentUser } from '../../utils/localStorage'
+    import { updateFontFamily } from '../../api/reader'
 
     export default {
         mixins: [bookMixin],
@@ -42,7 +43,10 @@
             },
             selectFontFamily (item) {
                 this.setDefaultFontFamily(item.font)
-                setFontFamily(this.fileName, item.font)
+                const currentUser = getCurrentUser()
+                if (currentUser) {
+                    updateFontFamily(currentUser.id, this.bookId, item.font)
+                }
                 if (item.font === 'Default') {
                     this.currentBook.rendition.themes.font('Times New Roman')
                 } else {

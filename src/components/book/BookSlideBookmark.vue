@@ -24,9 +24,10 @@
 </template>
 
 <script>
-    import { getBookmark } from '../../utils/localStorage'
     import { bookMixin } from '../../utils/mixin'
     import Scroll from '../common/Scroll'
+    import { getBookmark } from '../../api/reader'
+    import { getCurrentUser } from '../../utils/localStorage'
 
     export default {
         components: { Scroll },
@@ -46,7 +47,14 @@
             }
         },
         mounted () {
-            this.bookmark = getBookmark(this.fileName)
+            const currentUser = getCurrentUser()
+            if (currentUser) {
+                getBookmark(currentUser.id, this.bookId).then(res => {
+                    if (res.data && res.data.error_code === 0 && res.data.data) {
+                        this.bookmark = res.data.data
+                    }
+                })
+            }
         }
     }
 </script>

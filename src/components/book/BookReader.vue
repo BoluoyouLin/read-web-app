@@ -16,14 +16,12 @@
     import { bookMixin } from '../../utils/mixin'
     import Epub from 'epubjs'
     import {
-        getFontFamily,
         getFontSize,
-        setFontFamily,
-        setFontSize, getBookLocation, getCurrentUser
+        getCurrentUser
     } from '../../utils/localStorage'
     import { flatten } from '../../utils/book'
     import { getLocalForage } from '../../utils/localForage'
-    import { addTheme, getUserTheme } from '../../api/reader'
+    import { addTheme, addUserBookInfo, getUserBookInfo, getUserTheme } from '../../api/reader'
     global.ePub = Epub
     export default {
         mixins: [bookMixin],
@@ -131,13 +129,10 @@
                 this.setMenuVisible(!this.menuVisible)
             },
             // 初始化字体大小
-            initFontSize () {
-                const fontSize = getFontSize(this.fileName)
+            initFontSize (fontSize) {
                 if (fontSize) {
                     this.setDefaultFontSize(fontSize)
                     this.currentBook.rendition.themes.fontSize(fontSize + 'px')
-                } else {
-                    setFontSize(this.fileName, this.defaultFontSize)
                 }
             },
             // 从数据库获取用户主题
@@ -178,13 +173,10 @@
                 }
             },
             // 初始化字体类型
-            initFontFamily () {
-                const fontFamily = getFontFamily(this.fileName)
+            initFontFamily (fontFamily) {
                 if (fontFamily) {
                     this.setDefaultFontFamily(fontFamily)
                     this.currentBook.rendition.themes.font(fontFamily)
-                } else {
-                    setFontFamily(this.fileName, this.defaultFontFamily)
                 }
             },
             // 获取图书信息（封面、书名、作者、目录）
@@ -211,6 +203,16 @@
                     this.setNavigation(navList)
                 })
             },
+            // 默认渲染
+            defaultDisplay () {
+                this.display(undefined).then(() => {
+                    this.initTheme()
+                    this.initFontSize(16)
+                    this.initFontFamily('Default')
+                    this.updateProgress()
+                    this.getInfo()
+                })
+            },
             // 根据url获取并解析epub电子书
             initEpub (url) {
                 this.book = new Epub(url)
@@ -220,14 +222,30 @@
                     height: innerHeight,
                     methods: 'default'
                 })
-                const locationCFI = getBookLocation(this.fileName)
-                this.display(locationCFI).then(() => {
-                    this.initTheme()
-                    this.initFontSize()
-                    this.initFontFamily()
-                    this.updateProgress()
-                    this.getInfo()
-                })
+                const currentUser = getCurrentUser()
+                if (currentUser) {
+                    getUserBookInfo(currentUser.id, this.bookId).then(res => {
+                        if (res.data && res.data.error_code === 0 && res.data.data) {
+                            const bookInfo = res.data.data
+                            const locationCFI = bookInfo.location
+                            const fontSize = bookInfo.fontSize
+                            const fontFamily = bookInfo.fontFamily
+                            this.display(locationCFI).then(() => {
+                                this.initTheme()
+                                this.initFontSize(fontSize)
+                                this.initFontFamily(fontFamily)
+                                this.updateProgress()
+                                this.getInfo()
+                            })
+                        } else {
+                            addUserBookInfo(currentUser.id, this.bookId, 16,
+                                'Default', undefined)
+                            this.defaultDisplay()
+                        }
+                    })
+                } else {
+                    this.defaultDisplay()
+                }
                 this.bookRender.hooks.content.register(contents => {
                     Promise.all([
                         contents.addStylesheet(`${process.env.VUE_APP_RESOURCE_URL}/fonts/cabin.css`),
@@ -250,14 +268,16 @@
         mounted () {
             const items = this.$route.params.fileName.split('|')
             const fileName = items[1]
+            this.setBookId(parseInt(items[2]))
+            items.pop()
             getLocalForage(fileName, (err, blob) => {
                 if (!err && blob) {
-                    // console.log('找到离线缓存的电子书')
+                    // 找到离线缓存的电子书
                     this.setFileName(items.join('/')).then(() => {
                         this.initEpub(blob)
                     })
                 } else {
-                    // console.log('在线获取电子书')
+                    // 在线获取电子书
                     this.setFileName(items.join('/'))
                         .then(() => {
                             const url = `${process.env.VUE_APP_RESOURCE_URL}/epub/${this.fileName}.epub`

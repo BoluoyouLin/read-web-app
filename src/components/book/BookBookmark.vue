@@ -19,7 +19,8 @@
     import Bookmark from '../common/Bookmark'
     import { px2rem, realPx } from '../../utils/utils'
     import { bookMixin } from '../../utils/mixin'
-    import { getBookmark, setBookmark } from '../../utils/localStorage'
+    import { addBookmark, deleteBookmark, getBookmark } from '../../api/reader'
+    import { getCurrentUser } from '../../utils/localStorage'
     const BLUE = '#1E90FF'
     const WHITE = '#FFF'
     export default {
@@ -128,35 +129,35 @@
             },
             // 添加书签
             addBookmark () {
-                this.bookmark = getBookmark(this.fileName)
-                if (!this.bookmark) {
-                    this.bookmark = []
-                }
-                const currentLocation = this.currentBook.rendition.currentLocation()
-                const baseCFI = currentLocation.start.cfi.replace(/!.*/, '')
-                const startCFI = currentLocation.start.cfi.replace(/.*!/, '')
-                    .replace(/\)/, '')
-                const endCFI = currentLocation.end.cfi.replace(/.*!/, '')
-                    .replace(/\)/, '')
-                const rangeCFI = `${baseCFI}!,${startCFI},${endCFI})`
-                this.currentBook.getRange(rangeCFI).then(range => {
-                    const text = range.toString().replace(/\s\s/, '')
-                    this.bookmark.push({
-                        cfi: currentLocation.start.cfi,
-                        text
+                const currentUser = getCurrentUser()
+                if (currentUser) {
+                    const currentLocation = this.currentBook.rendition.currentLocation()
+                    const baseCFI = currentLocation.start.cfi.replace(/!.*/, '')
+                    const startCFI = currentLocation.start.cfi.replace(/.*!/, '')
+                        .replace(/\)/, '')
+                    const endCFI = currentLocation.end.cfi.replace(/.*!/, '')
+                        .replace(/\)/, '')
+                    const rangeCFI = `${baseCFI}!,${startCFI},${endCFI})`
+                    this.currentBook.getRange(rangeCFI).then(range => {
+                        const text = range.toString().replace(/\s\s/, '')
+                        addBookmark(currentUser.id, this.bookId, currentLocation.start.cfi, text)
                     })
-                    setBookmark(this.fileName, this.bookmark)
-                })
+                }
             },
             // 删除书签
             deleteBookmark () {
-                this.bookmark = getBookmark(this.fileName)
-                if (!this.bookmark) {
-                    this.bookmark = []
+                const currentUser = getCurrentUser()
+                if (currentUser) {
+                    getBookmark(currentUser.id, this.bookId).then(res => {
+                        if (res.data && res.data.error_code === 0 && res.data.data && res.data.data.length > 0) {
+                            this.bookmark = res.data.data
+                            const currentLocation = this.currentBook.rendition.currentLocation()
+                            const startCFI = currentLocation.start.cfi
+                            const bookmarkItem = this.bookmark.filter(item => item.cfi === startCFI)[0]
+                            deleteBookmark(bookmarkItem.id)
+                        }
+                    })
                 }
-                const currentLocation = this.currentBook.rendition.currentLocation()
-                const startCFI = currentLocation.start.cfi
-                setBookmark(this.fileName, this.bookmark.filter(item => item.cfi !== startCFI))
             }
         }
     }

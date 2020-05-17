@@ -1,12 +1,14 @@
 import { mapGetters, mapActions } from 'vuex'
 import { addCSS, removeAllCSS, themeList } from './book'
-import { getBookmark, getCurrentUser, setBookLocation } from './localStorage'
+import { getCurrentUser } from './localStorage'
 import { moveOutBookInDirectory, shelf } from '../api/shelf'
 import { addToShelf, removeToShelf } from './shelf'
+import { getBookmark, updateLocation } from '../api/reader'
 
 export const bookMixin = {
     computed: {
         ...mapGetters([
+            'bookId',
             'fileName',
             'menuVisible',
             'settingVisible',
@@ -37,6 +39,7 @@ export const bookMixin = {
     },
     methods: {
         ...mapActions([
+            'setBookId',
             'setFileName',
             'setMenuVisible',
             'setSettingVisible',
@@ -67,18 +70,27 @@ export const bookMixin = {
             const currentLocation = this.currentBook.rendition.currentLocation()
             if (currentLocation && currentLocation.start) {
                 const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
-                setBookLocation(this.fileName, currentLocation.start.cfi)
+                const currentUser = getCurrentUser()
+                if (currentUser) {
+                    updateLocation(currentUser.id, this.bookId, currentLocation.start.cfi)
+                }
                 this.setProgress(Math.floor(progress * 100))
                 this.setSection(currentLocation.start.index)
-                const bookmark = getBookmark(this.fileName)
-                if (bookmark) {
-                    if (bookmark.some(item => item.cfi === currentLocation.start.cfi)) {
-                        this.setIsBookmark(true)
-                    } else {
-                        this.setIsBookmark(false)
-                    }
-                } else {
-                    this.setIsBookmark(false)
+                if (currentUser) {
+                    getBookmark(currentUser.id, this.bookId).then(res => {
+                        if (res.data && res.data.error_code === 0 && res.data.data) {
+                            const bookmark = res.data.data
+                            if (bookmark) {
+                                if (bookmark.some(item => item.cfi === currentLocation.start.cfi)) {
+                                    this.setIsBookmark(true)
+                                } else {
+                                    this.setIsBookmark(false)
+                                }
+                            } else {
+                                this.setIsBookmark(false)
+                            }
+                        }
+                    })
                 }
             }
         },

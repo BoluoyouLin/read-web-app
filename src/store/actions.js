@@ -1,5 +1,8 @@
 const actions = {
     // book
+    setBookId: ({ commit }, newBookId) => {
+        return commit('SET_BOOK_ID', newBookId)
+    },
     setFontFamilyVisible: ({ commit }, newVisible) => {
         return commit('SET_FONT_FAMILY_VISIBLE', newVisible)
     },

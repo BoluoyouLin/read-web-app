@@ -23,7 +23,7 @@
 
 <script>
     import { shelfMixin } from '../../utils/mixin'
-    import { setBookShelf, deleteLocalStorage } from '../../utils/localStorage'
+    import { deleteLocalStorage } from '../../utils/localStorage'
     import { download } from '../../api/store'
     import { removeLocalForage } from '../../utils/localForage'
     import { removeBookOfShelf, setBookCache, setBookPrivate } from '../../api/shelf'
@@ -90,7 +90,6 @@
                 this.hidePopup()
                 this.setIsEditMode(false)
                 this.clearShelfSelected()
-                setBookShelf(this.shelfList)
                 const toast = this.toast()
                 if (isPrivate) {
                     toast.show()
@@ -155,7 +154,6 @@
                         book.cache = false
                         setBookCache(book.shelfId, false)
                     })
-                    setBookShelf(this.shelfList)
                     const toast = this.toast({
                         text: this.$t('shelf.removeDownloadSuccess')
                     })
@@ -184,7 +182,6 @@
                 this.hidePopup()
                 this.setIsEditMode(false)
                 this.clearShelfSelected()
-                setBookShelf(this.shelfList)
             },
             // 下载选中的图书
             async downloadSelectBook () {
@@ -245,7 +242,7 @@
             // 将图书移出书架
             removeShelfBook () {
                 this.shelfSelected.forEach(item => {
-                   removeBookOfShelf(item.shelfId)
+                    removeBookOfShelf(item.shelfId)
                 })
                 let newShelf = []
                 for (let i = 0; i < this.shelfSelected.length; i++) {

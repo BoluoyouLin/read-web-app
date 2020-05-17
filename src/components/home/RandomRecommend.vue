@@ -89,10 +89,6 @@
                     const data = res.data
                     if (data.error_code === 0) {
                         this.data = data.random[0]
-                        this.$nextTick(() => {
-                            this.stopFlipCardAnimation()
-                            this.startBookCardAnimation()
-                        })
                     } else {
                         const toast = this.toast({
                             text: data.msg
@@ -109,9 +105,9 @@
                 this.setFlipCardVisible(false)
                 this.stopFlipCardAnimation()
                 this.closeBookCardAnimation()
-                // if (this.task2) {
-                //     clearTimeout(this.task2)
-                // }
+                if (this.task2) {
+                    clearTimeout(this.task2)
+                }
             },
             // 绑定半圆样式
             circleStyle (item, simple) {
@@ -163,10 +159,10 @@
                 this.task = setInterval(() => {
                     this.flipCardRotate()
                 }, 30)
-                // this.task2 = setTimeout(() => {
-                //     this.stopFlipCardAnimation()
-                //     this.startBookCardAnimation()
-                // }, 2500)
+                this.task2 = setTimeout(() => {
+                    this.stopFlipCardAnimation()
+                    this.startBookCardAnimation()
+                }, 2500)
             },
             // 下一次动画
             nextFlipCardAnimation () {
